@@ -72,6 +72,15 @@
             padding-right: max(20px, env(safe-area-inset-right));
         }
 
+        /* Portrait mode - minimize padding */
+        @media (orientation: portrait) {
+            body {
+                padding: 10px;
+                padding-top: max(10px, env(safe-area-inset-top));
+                padding-bottom: max(10px, env(safe-area-inset-bottom));
+            }
+        }
+
         /* Landscape mode adjustments */
         @media (orientation: landscape) {
             body {
@@ -101,14 +110,71 @@
             .calculator {
                 flex-direction: column;
                 max-width: 600px;
-                padding: 20px;
-                gap: 20px;
+                padding: 15px;
+                gap: 15px;
+                max-height: 95vh;
+                overflow-y: auto;
             }
 
             .left-panel,
             .right-panel {
                 flex: none;
                 width: 100%;
+            }
+
+            .left-panel {
+                gap: 10px;
+            }
+
+            .right-panel {
+                gap: 10px;
+            }
+
+            .stack-display {
+                max-height: 30vh;
+                min-height: 150px;
+                padding: 10px;
+            }
+
+            .input-display {
+                padding: 10px;
+                min-height: 50px;
+            }
+
+            .memory-indicator {
+                font-size: 11px;
+                min-height: 16px;
+            }
+
+            .mode-selector {
+                gap: 6px;
+            }
+
+            .mode-btn {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .function-row {
+                gap: 6px;
+                margin-bottom: 6px;
+            }
+
+            .keypad {
+                height: 40vh;
+                min-height: 280px;
+                gap: 6px;
+            }
+
+            .key {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .key.function,
+            .key.special,
+            .key.math {
+                font-size: 13px;
             }
         }
 
@@ -265,6 +331,22 @@
             margin: 2px 0;
             border-radius: 5px;
             background: #252525;
+        }
+
+        /* More compact in portrait mode */
+        @media (orientation: portrait) {
+            .stack-row {
+                padding: 5px 8px;
+                margin: 1px 0;
+            }
+
+            .stack-label {
+                font-size: 12px;
+            }
+
+            .stack-value {
+                font-size: 14px;
+            }
         }
 
         .stack-row.x-register {
