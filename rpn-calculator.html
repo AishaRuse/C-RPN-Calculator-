@@ -75,9 +75,10 @@
         /* Portrait mode - minimize padding */
         @media (orientation: portrait) {
             body {
-                padding: 5px;
-                padding-top: max(5px, env(safe-area-inset-top));
-                padding-bottom: max(5px, env(safe-area-inset-bottom));
+                padding: 3px;
+                padding-top: max(3px, env(safe-area-inset-top));
+                padding-bottom: max(3px, env(safe-area-inset-bottom));
+                align-items: flex-start;
             }
         }
 
@@ -105,13 +106,19 @@
             gap: 30px;
         }
 
+        @media (orientation: portrait) {
+            .calculator {
+                border-radius: 12px;
+            }
+        }
+
         /* Responsive layout adjustments */
         @media (max-width: 1024px) and (orientation: portrait) {
             .calculator {
                 flex-direction: column;
                 max-width: 600px;
-                padding: 10px;
-                gap: 8px;
+                padding: 8px;
+                gap: 5px;
                 max-height: 98vh;
                 overflow: hidden;
             }
@@ -123,67 +130,75 @@
             }
 
             .left-panel {
-                gap: 6px;
+                gap: 4px;
                 flex-shrink: 1;
             }
 
             .right-panel {
-                gap: 6px;
+                gap: 4px;
                 flex-shrink: 0;
             }
 
             .stack-display {
-                max-height: 22vh;
-                min-height: 120px;
-                padding: 8px;
+                max-height: 18vh;
+                min-height: 100px;
+                padding: 6px;
                 overflow-y: auto;
             }
 
             .input-display {
-                padding: 8px;
-                min-height: 40px;
+                padding: 6px;
+                min-height: 36px;
             }
 
             .memory-indicator {
-                font-size: 10px;
-                min-height: 14px;
+                font-size: 9px;
+                min-height: 12px;
                 margin-bottom: 0;
             }
 
             .mode-selector {
-                gap: 5px;
+                gap: 4px;
+                margin-bottom: 0;
             }
 
             .mode-btn {
-                padding: 6px;
-                font-size: 12px;
+                padding: 5px;
+                font-size: 11px;
             }
 
             .function-row {
-                gap: 5px;
-                margin-bottom: 5px;
+                gap: 4px;
+                margin-bottom: 4px;
+            }
+
+            /* Make function buttons much less tall */
+            .function-row .key {
+                padding: 6px 4px;
+                font-size: 10px;
+                min-height: 32px;
             }
 
             .keypad {
-                height: 38vh;
-                min-height: 250px;
-                max-height: 320px;
-                gap: 5px;
+                height: 42vh;
+                min-height: 260px;
+                max-height: 340px;
+                gap: 4px;
             }
 
             .key {
-                padding: 8px;
-                font-size: 15px;
+                padding: 6px;
+                font-size: 14px;
             }
 
             .key.function,
             .key.special,
             .key.math {
-                font-size: 11px;
+                font-size: 10px;
             }
 
             .input-value {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
 
@@ -345,16 +360,16 @@
         /* More compact in portrait mode */
         @media (orientation: portrait) {
             .stack-row {
-                padding: 4px 6px;
-                margin: 1px 0;
+                padding: 3px 5px;
+                margin: 0;
             }
 
             .stack-label {
-                font-size: 11px;
+                font-size: 10px;
             }
 
             .stack-value {
-                font-size: 13px;
+                font-size: 12px;
             }
         }
 
