@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HP-Style RPN Calculator</title>
+    <title>HP-Style RPN Calculator v1.0</title>
     
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,15 +18,6 @@
     <link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
     
-    <!-- Splash Screens for iOS -->
-    <link rel="apple-touch-startup-image" href="splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-    
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
     
@@ -39,7 +30,6 @@
             box-sizing: border-box;
         }
 
-        /* Prevent iOS bounce scrolling and ensure full viewport */
         html, body {
             position: fixed;
             overflow: hidden;
@@ -48,7 +38,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Allow scrolling in landscape when needed */
         @media (orientation: landscape) {
             html, body {
                 position: relative;
@@ -65,14 +54,12 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            /* Support for iPhone notch */
             padding-top: max(20px, env(safe-area-inset-top));
             padding-bottom: max(20px, env(safe-area-inset-bottom));
             padding-left: max(20px, env(safe-area-inset-left));
             padding-right: max(20px, env(safe-area-inset-right));
         }
 
-        /* Portrait mode - minimize padding */
         @media (orientation: portrait) {
             body {
                 padding: 3px;
@@ -82,16 +69,11 @@
             }
         }
 
-        /* Landscape mode adjustments */
         @media (orientation: landscape) {
             body {
                 align-items: flex-start;
                 padding-top: max(10px, env(safe-area-inset-top));
                 padding-bottom: max(10px, env(safe-area-inset-bottom));
-            }
-
-            html, body {
-                overflow-y: auto;
             }
         }
 
@@ -112,7 +94,122 @@
             }
         }
 
-        /* Responsive layout adjustments */
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 0;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #444;
+            color: #aaa;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .stack-display {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 200px;
+        }
+
+        @media (orientation: portrait) {
+            .stack-display {
+                max-height: 400px;
+            }
+        }
+
+        @media (orientation: landscape) {
+            .stack-display {
+                max-height: 60vh;
+            }
+        }
+
+        .stack-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin: 2px 0;
+            border-radius: 5px;
+            background: #252525;
+        }
+
+        @media (orientation: portrait) {
+            .stack-row {
+                padding: 3px 5px;
+                margin: 0;
+            }
+
+            .stack-label {
+                font-size: 10px;
+            }
+
+            .stack-value {
+                font-size: 12px;
+            }
+        }
+
+        .stack-row.x-register {
+            background: #333;
+            border: 2px solid #ff6b35;
+        }
+
+        .stack-label {
+            color: #888;
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        .stack-value {
+            color: #0f0;
+            font-size: 18px;
+            text-align: right;
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .input-display {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 60px;
+        }
+
+        .input-value {
+            color: #fff;
+            font-size: 24px;
+            text-align: right;
+            font-weight: bold;
+        }
+
         @media (max-width: 1024px) and (orientation: portrait) {
             .calculator {
                 flex-direction: column;
@@ -172,7 +269,6 @@
                 margin-bottom: 4px;
             }
 
-            /* Make function buttons much less tall */
             .function-row .key {
                 padding: 6px 4px;
                 font-size: 10px;
@@ -202,6 +298,63 @@
             }
         }
 
+        @media (max-width: 430px) and (orientation: portrait) {
+            .calculator {
+                padding: 5px;
+                gap: 3px;
+            }
+
+            .left-panel {
+                gap: 3px;
+            }
+
+            .right-panel {
+                gap: 3px;
+            }
+
+            .stack-display {
+                max-height: 14vh;
+                min-height: 80px;
+                padding: 4px;
+            }
+
+            .input-display {
+                padding: 5px;
+                min-height: 32px;
+            }
+
+            .mode-btn {
+                padding: 4px;
+                font-size: 10px;
+            }
+
+            .function-row .key {
+                padding: 5px 2px;
+                font-size: 9px;
+                min-height: 26px;
+            }
+
+            .keypad {
+                height: 48vh;
+                min-height: 280px;
+                max-height: 350px;
+                gap: 3px;
+            }
+
+            .key {
+                padding: 5px;
+                font-size: 13px;
+            }
+
+            .key.number {
+                font-size: 15px;
+            }
+
+            .input-value {
+                font-size: 14px;
+            }
+        }
+
         @media (max-width: 1366px) and (orientation: landscape) {
             .calculator {
                 padding: 15px;
@@ -216,194 +369,158 @@
         }
 
         @media (max-width: 932px) and (orientation: landscape) {
-            /* iPhone landscape */
             .calculator {
-                padding: 10px;
-                gap: 10px;
-                max-height: 85vh;
+                padding: 6px;
+                gap: 8px;
+                flex-direction: row;
+                max-height: 96vh;
             }
 
-            .stack-display {
-                padding: 10px;
+            .left-panel {
+                flex: 0.8;
+                gap: 4px;
             }
 
-            .function-row {
-                gap: 6px;
-                margin-bottom: 6px;
-            }
-
-            .keypad {
-                gap: 6px;
-                height: 300px;
-            }
-
-            .key {
-                padding: 10px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 430px) {
-            /* iPhone portrait */
-            .calculator {
-                padding: 15px;
-                gap: 15px;
+            .right-panel {
+                flex: 1.2;
+                gap: 4px;
             }
 
             .mode-selector {
-                gap: 8px;
+                gap: 3px;
             }
 
             .mode-btn {
-                padding: 8px;
-                font-size: 14px;
+                padding: 3px;
+                font-size: 9px;
+            }
+
+            .stack-display {
+                max-height: 50vh;
+                min-height: 60px;
+                padding: 4px;
+                overflow-y: auto;
             }
 
             .stack-row {
-                padding: 6px 8px;
-            }
-
-            .stack-value {
-                font-size: 16px;
-            }
-
-            .input-value {
-                font-size: 20px;
-            }
-
-            .key {
-                padding: 15px;
-                font-size: 16px;
-            }
-
-            .function-row {
-                gap: 6px;
-                margin-bottom: 6px;
-            }
-
-            .keypad {
-                gap: 6px;
-                height: 350px;
-            }
-        }
-
-        .left-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-width: 0; /* Allow flex shrinking */
-        }
-
-        .right-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-width: 0; /* Allow flex shrinking */
-        }
-
-        .mode-selector {
-            display: flex;
-            gap: 10px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: #444;
-            color: #aaa;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .mode-btn.active {
-            background: #ff6b35;
-            color: white;
-        }
-
-        .stack-display {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 15px;
-            flex: 1;
-            overflow-y: auto;
-            min-height: 200px;
-        }
-
-        /* In portrait mode, limit stack height */
-        @media (orientation: portrait) {
-            .stack-display {
-                max-height: 400px;
-            }
-        }
-
-        /* In landscape mode, make stack more compact */
-        @media (orientation: landscape) {
-            .stack-display {
-                max-height: 60vh;
-            }
-        }
-
-        .stack-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 10px;
-            margin: 2px 0;
-            border-radius: 5px;
-            background: #252525;
-        }
-
-        /* More compact in portrait mode */
-        @media (orientation: portrait) {
-            .stack-row {
-                padding: 3px 5px;
+                padding: 2px 3px;
                 margin: 0;
             }
 
             .stack-label {
-                font-size: 10px;
+                font-size: 8px;
+                min-width: 20px;
             }
 
             .stack-value {
+                font-size: 10px;
+            }
+
+            .input-display {
+                padding: 4px;
+                min-height: 28px;
+            }
+
+            .input-value {
                 font-size: 12px;
+            }
+
+            .memory-indicator {
+                font-size: 8px;
+                min-height: 10px;
+            }
+
+            .function-row {
+                gap: 3px;
+                margin-bottom: 3px;
+            }
+
+            .function-row .key {
+                padding: 3px 2px;
+                font-size: 8px;
+                min-height: 22px;
+            }
+
+            .keypad {
+                height: 55vh;
+                min-height: 180px;
+                max-height: 240px;
+                gap: 3px;
+            }
+
+            .key {
+                padding: 4px;
+                font-size: 11px;
+            }
+
+            .key.number {
+                font-size: 13px;
+            }
+
+            .key.function,
+            .key.special,
+            .key.math {
+                font-size: 8px;
             }
         }
 
-        .stack-row.x-register {
-            background: #333;
-            border: 2px solid #ff6b35;
-        }
+        @media (max-width: 430px) {
+            .calculator {
+                padding: 6px;
+                gap: 4px;
+            }
 
-        .stack-label {
-            color: #888;
-            font-weight: bold;
-            min-width: 30px;
-        }
+            .mode-selector {
+                gap: 3px;
+            }
 
-        .stack-value {
-            color: #0f0;
-            font-size: 18px;
-            text-align: right;
-            flex: 1;
-            font-weight: bold;
-        }
+            .mode-btn {
+                padding: 4px;
+                font-size: 10px;
+            }
 
-        .input-display {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 15px;
-            min-height: 60px;
-        }
+            .stack-row {
+                padding: 2px 4px;
+                margin: 0;
+            }
 
-        .input-value {
-            color: #fff;
-            font-size: 24px;
-            text-align: right;
-            font-weight: bold;
+            .stack-label {
+                font-size: 9px;
+            }
+
+            .stack-value {
+                font-size: 11px;
+            }
+
+            .input-value {
+                font-size: 14px;
+            }
+
+            .function-row {
+                gap: 3px;
+                margin-bottom: 3px;
+            }
+
+            .function-row .key {
+                padding: 4px 2px;
+                font-size: 9px;
+                min-height: 28px;
+            }
+
+            .keypad {
+                gap: 3px;
+            }
+
+            .key {
+                padding: 6px;
+                font-size: 13px;
+            }
+
+            .key.function,
+            .key.special,
+            .key.math {
+                font-size: 9px;
+            }
         }
 
         .keypad {
@@ -415,7 +532,6 @@
             min-height: 300px;
         }
 
-        /* Adjust keypad for smaller screens */
         @media (max-height: 800px) and (orientation: landscape) {
             .keypad {
                 height: 280px;
@@ -436,10 +552,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 0; /* Allow grid to control size */
+            min-height: 0;
         }
 
-        /* Responsive key sizing */
         @media (max-width: 430px) {
             .key {
                 padding: 12px;
@@ -530,15 +645,11 @@
             background: #FFa726;
         }
 
-
         .memory-indicator {
             color: #ff6b35;
             font-size: 12px;
             text-align: center;
             min-height: 20px;
-        }
-
-        .wide-section {
         }
 
         .function-row {
@@ -569,35 +680,30 @@
             </div>
 
             <div class="wide-section">
-                <!-- Row 1: Memory basic (Purple) -->
                 <div class="function-row">
                     <button class="key special" data-key="STO">STO</button>
                     <button class="key special" data-key="RCL">RCL</button>
                     <button class="key special" data-key="RCL+">RCL+</button>
                     <button class="key special" data-key="RCL-">RCL−</button>
                 </div>
-                <!-- Row 2: Memory operations (Purple) -->
                 <div class="function-row">
                     <button class="key special" data-key="STO+">STO+</button>
                     <button class="key special" data-key="STO-">STO−</button>
                     <button class="key special" data-key="STO*">STO×</button>
                     <button class="key special" data-key="STO/">STO÷</button>
                 </div>
-                <!-- Row 3: Stack operations (Blue) -->
                 <div class="function-row">
                     <button class="key function" data-key="CLEAR">CLEAR</button>
                     <button class="key function" data-key="DROP">DROP</button>
                     <button class="key function" data-key="SWAP">SWAP</button>
                     <button class="key function" data-key="CLX">CLX</button>
                 </div>
-                <!-- Row 4: Stack manipulation (Blue) -->
                 <div class="function-row">
                     <button class="key function" data-key="ROLL↑">ROLL↑</button>
                     <button class="key function" data-key="ROLL↓">ROLL↓</button>
                     <button class="key function" data-key="LASTX">LASTX</button>
                     <button class="key" style="background: transparent; box-shadow: none; cursor: default;"></button>
                 </div>
-                <!-- Row 5: Math functions (Orange/Amber) -->
                 <div class="function-row">
                     <button class="key math" data-key="CHS">CHS</button>
                     <button class="key math" data-key="1/x">1/x</button>
@@ -607,30 +713,25 @@
             </div>
 
             <div class="keypad">
-                <!-- Row 1: % / * - -->
                 <button class="key operator" data-key="%">%</button>
                 <button class="key operator" data-key="/">/</button>
                 <button class="key operator" data-key="*">×</button>
                 <button class="key operator" data-key="-">−</button>
                 
-                <!-- Row 2: 7 8 9 + (+ spans 2 rows) -->
                 <button class="key number" data-key="7">7</button>
                 <button class="key number" data-key="8">8</button>
                 <button class="key number" data-key="9">9</button>
                 <button class="key operator plus" data-key="+">+</button>
                 
-                <!-- Row 3: 4 5 6 (+ continues from row 2) -->
                 <button class="key number" data-key="4">4</button>
                 <button class="key number" data-key="5">5</button>
                 <button class="key number" data-key="6">6</button>
                 
-                <!-- Row 4: 1 2 3 ENTER (Enter starts and spans 2 rows) -->
                 <button class="key number" data-key="1">1</button>
                 <button class="key number" data-key="2">2</button>
                 <button class="key number" data-key="3">3</button>
                 <button class="key enter" data-key="ENTER">ENTER</button>
                 
-                <!-- Row 5: 0 (spans 2 cols) . (Enter continues from row 4) -->
                 <button class="key number zero" data-key="0">0</button>
                 <button class="key number" data-key=".">.</button>
             </div>
@@ -642,7 +743,7 @@
             constructor() {
                 this.stack = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 this.input = '';
-                this.mode = 'decimal'; // 'decimal', 'integer', 'currency'
+                this.mode = 'decimal';
                 this.memory = 0;
                 this.lastX = 0;
                 this.enterPressed = false;
@@ -653,17 +754,13 @@
                 if (this.mode === 'integer') {
                     return Math.round(value).toString();
                 } else if (this.mode === 'currency') {
-                    // Format with 2 decimal places and thousand separators
                     const fixed = value.toFixed(2);
                     const parts = fixed.split('.');
-                    // Add thousand separators to integer part
                     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                     return parts.join('.');
                 } else {
-                    // Decimal mode - show up to 16 significant digits
                     if (Math.abs(value) < 1e-10) return '0';
                     let str = value.toPrecision(this.PRECISION);
-                    // Remove trailing zeros and decimal point if not needed
                     str = parseFloat(str).toString();
                     return str;
                 }
@@ -695,7 +792,6 @@
                     this.input = '';
                     this.enterPressed = true;
                 } else {
-                    // Duplicate X register
                     this.pushStack(this.stack[0]);
                 }
             }
@@ -800,12 +896,6 @@
                 }
             }
 
-            deleteLastChar() {
-                if (this.input.length > 0) {
-                    this.input = this.input.slice(0, -1);
-                }
-            }
-
             reciprocal() {
                 if (this.input !== '') {
                     this.enter();
@@ -818,14 +908,12 @@
             }
 
             clear() {
-                // Clear entire stack and input
                 this.stack = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 this.input = '';
                 this.enterPressed = false;
             }
 
             drop() {
-                // Drop X register, move stack down
                 this.input = '';
                 this.stack.shift();
                 this.stack.push(0);
@@ -833,7 +921,6 @@
             }
 
             swap() {
-                // Swap X and Y registers
                 if (this.input !== '') {
                     this.enter();
                 }
@@ -843,7 +930,6 @@
             }
 
             recallOp(op) {
-                // RCL+ and RCL−: combines memory with X and leaves result in X
                 const x = this.getCurrentInput();
                 if (this.input !== '') {
                     this.enter();
@@ -862,11 +948,19 @@
             const inputDisplay = document.getElementById('inputDisplay');
             const memoryIndicator = document.getElementById('memoryIndicator');
 
-            // Update stack display
+            let numRegisters = 12;
+            
+            if (window.innerWidth <= 430 && window.innerHeight > window.innerWidth) {
+                numRegisters = 6;
+            }
+            else if (window.innerWidth <= 932 && window.innerHeight <= 430) {
+                numRegisters = 4;
+            }
+
             const labels = ['X:', 'Y:', 'Z:', 'T:', '4:', '5:', '6:', '7:', '8:', '9:', '10:', '11:'];
             stackDisplay.innerHTML = '';
             
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < numRegisters; i++) {
                 const row = document.createElement('div');
                 row.className = 'stack-row' + (i === 0 ? ' x-register' : '');
                 
@@ -883,14 +977,12 @@
                 stackDisplay.appendChild(row);
             }
 
-            // Update input display
             if (calc.input !== '') {
                 inputDisplay.textContent = calc.input;
             } else {
                 inputDisplay.textContent = calc.formatValue(calc.stack[0]);
             }
 
-            // Update memory indicator
             if (calc.memory !== 0) {
                 memoryIndicator.textContent = `Memory: ${calc.formatValue(calc.memory)}`;
             } else {
@@ -899,7 +991,6 @@
         }
 
         function handleKey(key) {
-            // Check multi-character keys first before single character checks
             if (key === '1/x') {
                 calc.reciprocal();
             } else if (key === 'ENTER') {
@@ -959,14 +1050,12 @@
             updateDisplay();
         }
 
-        // Button click handlers
         document.querySelectorAll('.key').forEach(button => {
             button.addEventListener('click', () => {
                 handleKey(button.dataset.key);
             });
         });
 
-        // Mode selector
         document.querySelectorAll('.mode-btn').forEach(button => {
             button.addEventListener('click', () => {
                 document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -976,7 +1065,6 @@
             });
         });
 
-        // Keyboard support
         document.addEventListener('keydown', (e) => {
             e.preventDefault();
             
@@ -991,7 +1079,6 @@
                 '%': '%'
             };
             
-            // Backspace: delete char if inputting, otherwise CLX
             if (e.key === 'Backspace') {
                 if (calc.input !== '') {
                     calc.input = calc.input.slice(0, -1);
@@ -1007,8 +1094,12 @@
             }
         });
 
-        // Initial display
         updateDisplay();
+
+        window.addEventListener('resize', updateDisplay);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateDisplay, 100);
+        });
     </script>
 </body>
 </html>
