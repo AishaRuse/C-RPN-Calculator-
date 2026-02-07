@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HP-Style RPN Calculator v1.0</title>
+    <title>HP-Style RPN Calculator v1.1</title>
     
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,20 +31,11 @@
         }
 
         html, body {
-            position: fixed;
-            overflow: hidden;
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            position: fixed;
             -webkit-overflow-scrolling: touch;
-        }
-
-        @media (orientation: landscape) {
-            html, body {
-                position: relative;
-                overflow-y: auto;
-                height: auto;
-                min-height: 100%;
-            }
         }
 
         body {
@@ -53,30 +44,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            padding-top: max(20px, env(safe-area-inset-top));
-            padding-bottom: max(20px, env(safe-area-inset-bottom));
-            padding-left: max(20px, env(safe-area-inset-left));
-            padding-right: max(20px, env(safe-area-inset-right));
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
-        @media (orientation: portrait) {
-            body {
-                padding: 3px;
-                padding-top: max(3px, env(safe-area-inset-top));
-                padding-bottom: max(3px, env(safe-area-inset-bottom));
-                align-items: flex-start;
-            }
-        }
-
-        @media (orientation: landscape) {
-            body {
-                align-items: flex-start;
-                padding-top: max(10px, env(safe-area-inset-top));
-                padding-bottom: max(10px, env(safe-area-inset-bottom));
-            }
-        }
-
+        /* ============================================
+           DEFAULT LAYOUT - DESKTOP & LARGE SCREENS
+           ============================================ */
+        
         .calculator {
             background: #2a2a2a;
             border-radius: 20px;
@@ -84,14 +58,10 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 1200px;
+            height: 95vh;
             display: flex;
+            flex-direction: row;
             gap: 30px;
-        }
-
-        @media (orientation: portrait) {
-            .calculator {
-                border-radius: 12px;
-            }
         }
 
         .left-panel {
@@ -124,6 +94,7 @@
             cursor: pointer;
             border-radius: 5px;
             font-weight: bold;
+            font-size: 14px;
             transition: all 0.3s;
         }
 
@@ -132,25 +103,19 @@
             color: white;
         }
 
+        .memory-indicator {
+            color: #ff6b35;
+            font-size: 12px;
+            text-align: center;
+            min-height: 20px;
+        }
+
         .stack-display {
             background: #1a1a1a;
             border-radius: 10px;
             padding: 15px;
             flex: 1;
             overflow-y: auto;
-            min-height: 200px;
-        }
-
-        @media (orientation: portrait) {
-            .stack-display {
-                max-height: 400px;
-            }
-        }
-
-        @media (orientation: landscape) {
-            .stack-display {
-                max-height: 60vh;
-            }
         }
 
         .stack-row {
@@ -162,21 +127,6 @@
             background: #252525;
         }
 
-        @media (orientation: portrait) {
-            .stack-row {
-                padding: 3px 5px;
-                margin: 0;
-            }
-
-            .stack-label {
-                font-size: 10px;
-            }
-
-            .stack-value {
-                font-size: 12px;
-            }
-        }
-
         .stack-row.x-register {
             background: #333;
             border: 2px solid #ff6b35;
@@ -186,6 +136,7 @@
             color: #888;
             font-weight: bold;
             min-width: 30px;
+            font-size: 14px;
         }
 
         .stack-value {
@@ -210,347 +161,16 @@
             font-weight: bold;
         }
 
-        /* iPad portrait - make taller to nearly fit screen */
-        @media (min-width: 431px) and (max-width: 1024px) and (orientation: portrait) {
-            .calculator {
-                flex-direction: column;
-                max-width: 600px;
-                padding: 10px;
-                gap: 8px;
-                max-height: 98vh;
-                overflow: hidden;
-            }
-
-            .left-panel,
-            .right-panel {
-                flex: none;
-                width: 100%;
-            }
-
-            .left-panel {
-                gap: 6px;
-                flex-shrink: 1;
-            }
-
-            .right-panel {
-                gap: 6px;
-                flex-shrink: 0;
-            }
-
-            .stack-display {
-                max-height: 24vh;
-                min-height: 120px;
-                padding: 8px;
-                overflow-y: auto;
-            }
-
-            .input-display {
-                padding: 8px;
-                min-height: 40px;
-            }
-
-            .memory-indicator {
-                font-size: 10px;
-                min-height: 14px;
-                margin-bottom: 0;
-            }
-
-            .mode-selector {
-                gap: 6px;
-                margin-bottom: 0;
-            }
-
-            .mode-btn {
-                padding: 6px;
-                font-size: 12px;
-            }
-
-            .function-row {
-                gap: 6px;
-                margin-bottom: 6px;
-            }
-
-            .function-row .key {
-                padding: 8px 5px;
-                font-size: 11px;
-                min-height: 36px;
-            }
-
-            .keypad {
-                height: 45vh;
-                min-height: 300px;
-                max-height: 380px;
-                gap: 6px;
-            }
-
-            .key {
-                padding: 8px;
-                font-size: 15px;
-            }
-
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 11px;
-            }
-
-            .input-value {
-                font-size: 18px;
-            }
+        .function-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        /* iPhone portrait - keep existing compact layout */
-        @media (max-width: 430px) and (orientation: portrait) {
-            .calculator {
-                padding: 5px;
-                gap: 3px;
-                flex-direction: column;
-                max-height: 98vh;
-                overflow: hidden;
-            }
-
-            .left-panel {
-                gap: 3px;
-                flex: none;
-                width: 100%;
-            }
-
-            .right-panel {
-                gap: 3px;
-                flex: none;
-                width: 100%;
-            }
-
-            .stack-display {
-                max-height: 14vh;
-                min-height: 80px;
-                padding: 4px;
-            }
-
-            .input-display {
-                padding: 5px;
-                min-height: 32px;
-            }
-
-            .mode-btn {
-                padding: 4px;
-                font-size: 10px;
-            }
-
-            .function-row {
-                gap: 3px;
-                margin-bottom: 3px;
-            }
-
-            .function-row .key {
-                padding: 5px 2px;
-                font-size: 9px;
-                min-height: 26px;
-            }
-
-            .keypad {
-                height: 48vh;
-                min-height: 280px;
-                max-height: 350px;
-                gap: 3px;
-            }
-
-            .key {
-                padding: 5px;
-                font-size: 13px;
-            }
-
-            .key.number {
-                font-size: 15px;
-            }
-
-            .input-value {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 1366px) and (orientation: landscape) {
-            .calculator {
-                padding: 15px;
-                gap: 20px;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-
-            body {
-                padding: 10px;
-            }
-        }
-
-        /* iPhone landscape - function buttons below stack */
-        @media (max-width: 932px) and (orientation: landscape) {
-            .calculator {
-                padding: 5px;
-                gap: 6px;
-                flex-direction: row;
-                max-height: 98vh;
-            }
-
-            .left-panel {
-                flex: 0.9;
-                gap: 3px;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .right-panel {
-                flex: 1.1;
-                gap: 3px;
-            }
-
-            .mode-selector {
-                gap: 2px;
-            }
-
-            .mode-btn {
-                padding: 2px;
-                font-size: 8px;
-            }
-
-            .stack-display {
-                max-height: 35vh;
-                min-height: 50px;
-                padding: 3px;
-                overflow-y: auto;
-                flex: 1;
-            }
-
-            .stack-row {
-                padding: 2px 3px;
-                margin: 0;
-            }
-
-            .stack-label {
-                font-size: 8px;
-                min-width: 18px;
-            }
-
-            .stack-value {
-                font-size: 9px;
-            }
-
-            .input-display {
-                padding: 3px;
-                min-height: 24px;
-            }
-
-            .input-value {
-                font-size: 11px;
-            }
-
-            .memory-indicator {
-                font-size: 7px;
-                min-height: 8px;
-            }
-
-            /* Function buttons in left panel below stack */
-            .left-panel .function-section {
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-            }
-
-            .left-panel .function-row {
-                gap: 2px;
-                margin-bottom: 2px;
-            }
-
-            .left-panel .function-row .key {
-                padding: 2px 1px;
-                font-size: 7px;
-                min-height: 18px;
-            }
-
-            /* Hide function buttons from right panel */
-            .right-panel .wide-section {
-                display: none;
-            }
-
-            .keypad {
-                height: 90vh;
-                min-height: 150px;
-                max-height: 200px;
-                gap: 2px;
-            }
-
-            .key {
-                padding: 3px;
-                font-size: 10px;
-            }
-
-            .key.number {
-                font-size: 12px;
-            }
-
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 7px;
-            }
-        }
-
-        @media (max-width: 430px) {
-            .calculator {
-                padding: 6px;
-                gap: 4px;
-            }
-
-            .mode-selector {
-                gap: 3px;
-            }
-
-            .mode-btn {
-                padding: 4px;
-                font-size: 10px;
-            }
-
-            .stack-row {
-                padding: 2px 4px;
-                margin: 0;
-            }
-
-            .stack-label {
-                font-size: 9px;
-            }
-
-            .stack-value {
-                font-size: 11px;
-            }
-
-            .input-value {
-                font-size: 14px;
-            }
-
-            .function-row {
-                gap: 3px;
-                margin-bottom: 3px;
-            }
-
-            .function-row .key {
-                padding: 4px 2px;
-                font-size: 9px;
-                min-height: 28px;
-            }
-
-            .keypad {
-                gap: 3px;
-            }
-
-            .key {
-                padding: 6px;
-                font-size: 13px;
-            }
-
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 9px;
-            }
+        .function-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
         }
 
         .keypad {
@@ -558,14 +178,7 @@
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(5, 1fr);
             gap: 8px;
-            height: 400px;
-            min-height: 300px;
-        }
-
-        @media (max-height: 800px) and (orientation: landscape) {
-            .keypad {
-                height: 280px;
-            }
+            flex: 1;
         }
 
         .key {
@@ -575,35 +188,13 @@
             color: white;
             font-size: 18px;
             font-weight: bold;
-            padding: 20px;
             cursor: pointer;
             transition: all 0.1s;
             box-shadow: 0 4px 0 #222;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 0;
-        }
-
-        @media (max-width: 430px) {
-            .key {
-                padding: 12px;
-                font-size: 16px;
-                border-radius: 6px;
-            }
-        }
-
-        @media (orientation: landscape) and (max-height: 800px) {
-            .key {
-                padding: 8px;
-                font-size: 14px;
-            }
-
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 12px;
-            }
+            padding: 10px;
         }
 
         .key:active {
@@ -675,22 +266,369 @@
             background: #FFa726;
         }
 
-        .memory-indicator {
-            color: #ff6b35;
-            font-size: 12px;
-            text-align: center;
-            min-height: 20px;
+        .key.transparent {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
         }
 
-        .function-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 8px;
+        .key.transparent:hover {
+            background: transparent;
         }
 
-        .function-section {
-            display: contents;
+        .key.transparent:active {
+            transform: none;
+        }
+
+        /* ============================================
+           IPAD LANDSCAPE - 768px to 1024px width
+           Side-by-side layout, all 12 registers
+           ============================================ */
+        
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .calculator {
+                padding: 20px;
+                gap: 20px;
+                height: 96vh;
+            }
+
+            .left-panel {
+                gap: 15px;
+            }
+
+            .right-panel {
+                gap: 12px;
+            }
+
+            .stack-display {
+                max-height: 60vh;
+            }
+
+            .mode-btn {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .function-row {
+                gap: 6px;
+            }
+
+            .function-row .key {
+                font-size: 11px;
+                padding: 8px 4px;
+            }
+
+            .keypad {
+                gap: 6px;
+            }
+
+            .key {
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            .key.number {
+                font-size: 18px;
+            }
+        }
+
+        /* ============================================
+           IPAD PORTRAIT - 768px to 1024px width
+           Vertical layout, all 12 registers
+           ============================================ */
+        
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            .calculator {
+                flex-direction: column;
+                padding: 12px;
+                gap: 10px;
+                height: 98vh;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                flex: none;
+            }
+
+            .left-panel {
+                gap: 8px;
+            }
+
+            .right-panel {
+                gap: 8px;
+            }
+
+            .mode-btn {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .memory-indicator {
+                font-size: 11px;
+                min-height: 16px;
+            }
+
+            .stack-display {
+                height: 25vh;
+                min-height: 180px;
+            }
+
+            .stack-row {
+                padding: 6px 8px;
+                margin: 1px 0;
+            }
+
+            .stack-label {
+                font-size: 12px;
+            }
+
+            .stack-value {
+                font-size: 15px;
+            }
+
+            .input-display {
+                padding: 10px;
+                min-height: 50px;
+            }
+
+            .input-value {
+                font-size: 20px;
+            }
+
+            .function-section {
+                gap: 6px;
+            }
+
+            .function-row {
+                gap: 6px;
+            }
+
+            .function-row .key {
+                font-size: 11px;
+                padding: 10px 6px;
+            }
+
+            .keypad {
+                height: 48vh;
+                gap: 6px;
+            }
+
+            .key {
+                font-size: 16px;
+            }
+
+            .key.number {
+                font-size: 18px;
+            }
+        }
+
+        /* ============================================
+           IPHONE LANDSCAPE - Under 768px width
+           Side-by-side, function buttons under stack, 4 registers
+           ============================================ */
+        
+        @media (max-width: 767px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+            }
+
+            .calculator {
+                flex-direction: row;
+                padding: 8px;
+                gap: 8px;
+                height: 98vh;
+                border-radius: 10px;
+            }
+
+            .left-panel {
+                flex: 1;
+                gap: 4px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .right-panel {
+                flex: 1;
+                gap: 4px;
+            }
+
+            .mode-btn {
+                padding: 4px;
+                font-size: 9px;
+            }
+
+            .memory-indicator {
+                font-size: 8px;
+                min-height: 10px;
+            }
+
+            .stack-display {
+                height: 30vh;
+                padding: 6px;
+            }
+
+            .stack-row {
+                padding: 2px 4px;
+                margin: 0;
+            }
+
+            .stack-label {
+                font-size: 9px;
+                min-width: 20px;
+            }
+
+            .stack-value {
+                font-size: 10px;
+            }
+
+            .input-display {
+                padding: 6px;
+                min-height: 32px;
+            }
+
+            .input-value {
+                font-size: 13px;
+            }
+
+            .function-section {
+                gap: 3px;
+                flex: none;
+            }
+
+            .function-row {
+                gap: 3px;
+            }
+
+            .function-row .key {
+                font-size: 7px;
+                padding: 3px 2px;
+                min-height: 20px;
+            }
+
+            .keypad {
+                height: 55vh;
+                gap: 4px;
+            }
+
+            .key {
+                font-size: 12px;
+                padding: 4px;
+            }
+
+            .key.number {
+                font-size: 14px;
+            }
+
+            .key.function,
+            .key.special,
+            .key.math {
+                font-size: 8px;
+            }
+        }
+
+        /* ============================================
+           IPHONE PORTRAIT - Under 768px width
+           Vertical layout, 6 registers
+           ============================================ */
+        
+        @media (max-width: 767px) and (orientation: portrait) {
+            body {
+                padding: 5px;
+            }
+
+            .calculator {
+                flex-direction: column;
+                padding: 8px;
+                gap: 6px;
+                height: 98vh;
+                border-radius: 10px;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                flex: none;
+            }
+
+            .left-panel {
+                gap: 5px;
+            }
+
+            .right-panel {
+                gap: 5px;
+            }
+
+            .mode-btn {
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .memory-indicator {
+                font-size: 9px;
+                min-height: 12px;
+            }
+
+            .stack-display {
+                height: 18vh;
+                min-height: 100px;
+                padding: 6px;
+            }
+
+            .stack-row {
+                padding: 3px 5px;
+                margin: 0;
+            }
+
+            .stack-label {
+                font-size: 10px;
+            }
+
+            .stack-value {
+                font-size: 12px;
+            }
+
+            .input-display {
+                padding: 8px;
+                min-height: 40px;
+            }
+
+            .input-value {
+                font-size: 16px;
+            }
+
+            .function-section {
+                gap: 4px;
+            }
+
+            .function-row {
+                gap: 4px;
+            }
+
+            .function-row .key {
+                font-size: 9px;
+                padding: 6px 3px;
+            }
+
+            .keypad {
+                height: 52vh;
+                gap: 4px;
+            }
+
+            .key {
+                font-size: 14px;
+                padding: 6px;
+            }
+
+            .key.number {
+                font-size: 16px;
+            }
+
+            .key.function,
+            .key.special,
+            .key.math {
+                font-size: 9px;
+            }
         }
     </style>
 </head>
@@ -707,8 +645,8 @@
 
             <div class="stack-display" id="stackDisplay"></div>
 
-            <!-- Function buttons for iPhone landscape (below stack) -->
-            <div class="function-section">
+            <!-- Function buttons (visible in iPhone landscape, hidden in other layouts) -->
+            <div class="function-section" id="leftFunctions" style="display: none;">
                 <div class="function-row">
                     <button class="key special" data-key="STO">STO</button>
                     <button class="key special" data-key="RCL">RCL</button>
@@ -736,8 +674,8 @@
                 <div class="function-row">
                     <button class="key math" data-key="1/x">1/x</button>
                     <button class="key math" data-key="Δ%">Δ%</button>
-                    <button class="key" style="background: transparent; box-shadow: none; cursor: default;"></button>
-                    <button class="key" style="background: transparent; box-shadow: none; cursor: default;"></button>
+                    <button class="key transparent"></button>
+                    <button class="key transparent"></button>
                 </div>
             </div>
         </div>
@@ -747,8 +685,8 @@
                 <div class="input-value" id="inputDisplay">0</div>
             </div>
 
-            <!-- Function buttons for iPad/iPhone portrait and iPad landscape -->
-            <div class="wide-section">
+            <!-- Function buttons (visible in all layouts except iPhone landscape) -->
+            <div class="function-section" id="rightFunctions">
                 <div class="function-row">
                     <button class="key special" data-key="STO">STO</button>
                     <button class="key special" data-key="RCL">RCL</button>
@@ -771,13 +709,13 @@
                     <button class="key function" data-key="ROLL↑">ROLL↑</button>
                     <button class="key function" data-key="ROLL↓">ROLL↓</button>
                     <button class="key function" data-key="LASTX">LASTX</button>
-                    <button class="key" style="background: transparent; box-shadow: none; cursor: default;"></button>
+                    <button class="key transparent"></button>
                 </div>
                 <div class="function-row">
                     <button class="key math" data-key="CHS">CHS</button>
                     <button class="key math" data-key="1/x">1/x</button>
                     <button class="key math" data-key="Δ%">Δ%</button>
-                    <button class="key" style="background: transparent; box-shadow: none; cursor: default;"></button>
+                    <button class="key transparent"></button>
                 </div>
             </div>
 
@@ -1012,18 +950,44 @@
 
         const calc = new RPNCalculator();
 
+        function updateLayout() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const isLandscape = width > height;
+            
+            const leftFunctions = document.getElementById('leftFunctions');
+            const rightFunctions = document.getElementById('rightFunctions');
+            
+            // iPhone landscape: show functions in left panel
+            if (width <= 767 && isLandscape) {
+                leftFunctions.style.display = 'flex';
+                rightFunctions.style.display = 'none';
+            } else {
+                // All other layouts: show functions in right panel
+                leftFunctions.style.display = 'none';
+                rightFunctions.style.display = 'flex';
+            }
+        }
+
         function updateDisplay() {
             const stackDisplay = document.getElementById('stackDisplay');
             const inputDisplay = document.getElementById('inputDisplay');
             const memoryIndicator = document.getElementById('memoryIndicator');
 
-            let numRegisters = 12;
+            // Determine number of stack registers to show
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const isLandscape = width > height;
             
-            if (window.innerWidth <= 430 && window.innerHeight > window.innerWidth) {
-                numRegisters = 6;
-            }
-            else if (window.innerWidth <= 932 && window.innerHeight <= 430) {
-                numRegisters = 4;
+            let numRegisters = 12; // Default for desktop and iPad
+            
+            if (width <= 767) {
+                // iPhone
+                if (isLandscape) {
+                    numRegisters = 4; // iPhone landscape
+                } else {
+                    numRegisters = 6; // iPhone portrait
+                }
             }
 
             const labels = ['X:', 'Y:', 'Z:', 'T:', '4:', '5:', '6:', '7:', '8:', '9:', '10:', '11:'];
@@ -1121,7 +1085,9 @@
 
         document.querySelectorAll('.key').forEach(button => {
             button.addEventListener('click', () => {
-                handleKey(button.dataset.key);
+                if (button.dataset.key) {
+                    handleKey(button.dataset.key);
+                }
             });
         });
 
@@ -1163,11 +1129,21 @@
             }
         });
 
+        // Initialize
+        updateLayout();
         updateDisplay();
 
-        window.addEventListener('resize', updateDisplay);
+        // Update on resize/rotation
+        window.addEventListener('resize', () => {
+            updateLayout();
+            updateDisplay();
+        });
+        
         window.addEventListener('orientationchange', () => {
-            setTimeout(updateDisplay, 100);
+            setTimeout(() => {
+                updateLayout();
+                updateDisplay();
+            }, 100);
         });
     </script>
 </body>
