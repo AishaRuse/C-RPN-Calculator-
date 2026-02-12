@@ -284,12 +284,7 @@
            IPHONE LANDSCAPE - Under 768px width
            Side-by-side, function buttons under stack, 4 registers
            ============================================ */
-        
-         - Under 768px width
-           Side-by-side, function buttons under stack, 4 registers
-           ============================================ */
-        
-        
+
         /* iPad (including iPad Air 2025) - Landscape */
         @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: landscape) {
             html, body {
@@ -323,27 +318,49 @@
                 max-height: none;
                 min-height: 0;
             }
-            /* Slightly taller function keys (memory/stack/orange rows) */
-            .function-row .key.special,
-            .function-row .key.function,
-            .function-row .key.math {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                min-height: 50px;
+            body {
+                margin: 0;
+                padding: 0;
+                background: #2a2a2a;
+                overflow: hidden;
             }
 
-            /* Shrink keypad keys slightly so the overall layout fits cleanly */
+            .calculator {
+                transform: translateZ(0);
+            }
+
+            :root {
+                --ipad-key-h: clamp(50px, 6.2vh, 64px);
+                --ipad-key-gap: 6px;
+            }
+
+            /* Make ALL keys the same height on iPad */
+            .key {
+                min-height: var(--ipad-key-h);
+                padding: 8px;
+                font-size: 16px;
+            }
+
+            .key.number {
+                font-size: 18px;
+            }
+
+            .function-section {
+                gap: var(--ipad-key-gap);
+            }
+
+            .function-row {
+                gap: var(--ipad-key-gap);
+            }
+
             .keypad {
-                gap: 6px;
+                gap: var(--ipad-key-gap);
             }
 
-            .keypad .key {
-                font-size: 15px;
-                padding: 6px;
-            }
-
-            .keypad .key.number {
-                font-size: 17px;
+            /* Keep big keys proportional */
+            .key.enter,
+            .key.plus {
+                min-height: calc(var(--ipad-key-h) * 2 + var(--ipad-key-gap));
             }
 
         }
@@ -402,45 +419,52 @@
                 padding: 7px;
                 font-size: 15px;
             }
-
-            .calc-btn {
-                font-size: 18px;
-                min-height: 54px;
-            }
-
-            .btn-large {
-                min-height: 70px;
-            }
-
-            .keypad {
-                gap: 7px;
-                min-height: 0;
-            }
-
             .stack-display {
                 max-height: 36vh;
             }
-            /* Slightly taller function keys (memory/stack/orange rows) */
-            .function-row .key.special,
-            .function-row .key.function,
-            .function-row .key.math {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                min-height: 52px;
+            body {
+                margin: 0;
+                padding: 0;
+                background: #2a2a2a;
+                overflow: hidden;
             }
 
-            /* Shrink keypad keys slightly so everything fits in portrait */
-            .keypad {
-                gap: 6px;
+            .calculator {
+                transform: translateZ(0);
             }
 
-            .keypad .key {
-                font-size: 14px;
-                padding: 5px;
+            :root {
+                --ipad-key-h: clamp(46px, 5.2vh, 58px);
+                --ipad-key-gap: 6px;
             }
 
-            .keypad .key.number {
+            /* Make ALL keys the same height on iPad */
+            .key {
+                min-height: var(--ipad-key-h);
+                padding: 8px;
                 font-size: 16px;
+            }
+
+            .key.number {
+                font-size: 18px;
+            }
+
+            .function-section {
+                gap: var(--ipad-key-gap);
+            }
+
+            .function-row {
+                gap: var(--ipad-key-gap);
+            }
+
+            .keypad {
+                gap: var(--ipad-key-gap);
+            }
+
+            /* Keep big keys proportional */
+            .key.enter,
+            .key.plus {
+                min-height: calc(var(--ipad-key-h) * 2 + var(--ipad-key-gap));
             }
 
         }
