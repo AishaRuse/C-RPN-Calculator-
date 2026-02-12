@@ -420,7 +420,7 @@
                 font-size: 15px;
             }
             .stack-display {
-                max-height: 32vh;
+                max-height: 24vh;
             }
             body {
                 margin: 0;
@@ -471,103 +471,118 @@
 
 
 @media (max-width: 767px) and (orientation: landscape) {
-            body {
-                padding: 5px;
-            }
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 
-            .calculator {
-                flex-direction: row;
-                padding: 8px;
-                gap: 8px;
-                height: 98vh;
-                border-radius: 10px;
-            }
+    body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+    }
 
-            .left-panel {
-                flex: 1;
-                gap: 4px;
-                display: flex;
-                flex-direction: column;
-            }
+    .calculator {
+        /* iPhone landscape: fill the visible viewport and avoid any vertical overflow */
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        padding: calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right))
+                 calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
+        gap: 6px;
+        border-radius: 0;
 
-            .right-panel {
-                flex: 1;
-                gap: 4px;
-            }
+        --iphone-key-h: clamp(24px, 6.0vh, 32px);
+        --iphone-key-gap: 4px;
+    }
 
-            .mode-btn {
-                padding: 4px;
-                font-size: 9px;
-            }
+    .left-panel,
+    .right-panel {
+        gap: 6px;
+        min-width: 0;
+    }
 
-            .memory-indicator {
-                font-size: 8px;
-                min-height: 10px;
-            }
+    .mode-btn {
+        padding: 4px;
+        font-size: 10px;
+        border-radius: 6px;
+    }
 
-            .stack-display {
-                height: 30vh;
-                padding: 6px;
-            }
+    .memory-indicator {
+        font-size: 8px;
+        min-height: 10px;
+    }
 
-            .stack-row {
-                padding: 2px 4px;
-                margin: 0;
-            }
+    .stack-display {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 6px;
+    }
 
-            .stack-label {
-                font-size: 9px;
-                min-width: 20px;
-            }
+    .stack-row {
+        padding: 2px 4px;
+        margin: 1px 0;
+    }
 
-            .stack-value {
-                font-size: 10px;
-            }
+    .stack-label {
+        font-size: 9px;
+        min-width: 18px;
+    }
 
-            .input-display {
-                padding: 6px;
-                min-height: 32px;
-            }
+    .stack-value {
+        font-size: 10px;
+    }
 
-            .input-value {
-                font-size: 13px;
-            }
+    /* Landscape can have a shorter input field */
+    .input-display {
+        padding: 6px;
+        min-height: 24px;
+    }
 
-            .function-section {
-                gap: 3px;
-                flex: none;
-            }
+    .input-value {
+        font-size: 13px;
+    }
 
-            .function-row {
-                gap: 3px;
-            }
+    .function-section {
+        gap: var(--iphone-key-gap);
+        flex: 0 0 auto;
+    }
 
-            .function-row .key {
-                font-size: 7px;
-                padding: 3px 2px;
-                min-height: 20px;
-            }
+    .function-row {
+        gap: var(--iphone-key-gap);
+    }
 
-            .keypad {
-                height: 55vh;
-                gap: 4px;
-            }
+    .keypad {
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: var(--iphone-key-gap);
+    }
 
-            .key {
-                font-size: 12px;
-                padding: 4px;
-            }
+    /* Make ALL buttons the same base height on iPhone */
+    .key,
+    .function-row .key {
+        min-height: var(--iphone-key-h);
+        padding: 4px;
+        font-size: 12px;
+    }
 
-            .key.number {
-                font-size: 14px;
-            }
+    .key.number {
+        font-size: 14px;
+    }
 
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 8px;
-            }
-        }
+    .key.function,
+    .key.special,
+    .key.math {
+        font-size: 10px;
+    }
+
+    .key.enter,
+    .key.plus {
+        min-height: calc(var(--iphone-key-h) * 2 + var(--iphone-key-gap));
+    }
+}
 
         /* ============================================
            IPHONE PORTRAIT - Under 768px width
@@ -575,103 +590,128 @@
            ============================================ */
         
         @media (max-width: 767px) and (orientation: portrait) {
-            body {
-                padding: 5px;
-            }
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 
-            .calculator {
-                flex-direction: column;
-                padding: 8px;
-                gap: 6px;
-                height: 98vh;
-                border-radius: 10px;
-            }
+    body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+    }
 
-            .left-panel,
-            .right-panel {
-                width: 100%;
-                flex: none;
-            }
+    .calculator {
+        /* iPhone portrait: fill the visible viewport and avoid keypad cutoff */
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        flex-direction: column;
+        padding: calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right))
+                 calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
+        gap: 6px;
+        border-radius: 0;
 
-            .left-panel {
-                gap: 5px;
-            }
+        --iphone-key-h: clamp(32px, 4.2vh, 44px);
+        --iphone-key-gap: 6px;
+    }
 
-            .right-panel {
-                gap: 5px;
-            }
+    .left-panel {
+        width: 100%;
+        flex: 0 0 auto;
+        gap: 6px;
+        min-width: 0;
+    }
 
-            .mode-btn {
-                padding: 6px;
-                font-size: 11px;
-            }
+    .right-panel {
+        width: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: 6px;
+        min-width: 0;
+    }
 
-            .memory-indicator {
-                font-size: 9px;
-                min-height: 12px;
-            }
+    .mode-btn {
+        padding: 7px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
 
-            .stack-display {
-                height: 18vh;
-                min-height: 100px;
-                padding: 6px;
-            }
+    .memory-indicator {
+        font-size: 9px;
+        min-height: 12px;
+    }
 
-            .stack-row {
-                padding: 3px 5px;
-                margin: 0;
-            }
+    .stack-display {
+        flex: 0 0 auto;
+        max-height: 24vh;
+        min-height: 90px;
+        padding: 6px;
+        overflow-y: auto;
+    }
 
-            .stack-label {
-                font-size: 10px;
-            }
+    .stack-row {
+        padding: 3px 5px;
+        margin: 1px 0;
+    }
 
-            .stack-value {
-                font-size: 12px;
-            }
+    .stack-label {
+        font-size: 10px;
+    }
 
-            .input-display {
-                padding: 8px;
-                min-height: 40px;
-            }
+    .stack-value {
+        font-size: 12px;
+    }
 
-            .input-value {
-                font-size: 16px;
-            }
+    .input-display {
+        padding: 8px;
+        min-height: 34px;
+    }
 
-            .function-section {
-                gap: 4px;
-            }
+    .input-value {
+        font-size: 16px;
+    }
 
-            .function-row {
-                gap: 4px;
-            }
+    .function-section {
+        gap: var(--iphone-key-gap);
+        flex: 0 0 auto;
+    }
 
-            .function-row .key {
-                font-size: 9px;
-                padding: 6px 3px;
-            }
+    .function-row {
+        gap: var(--iphone-key-gap);
+    }
 
-            .keypad {
-                height: 52vh;
-                gap: 4px;
-            }
+    .keypad {
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: var(--iphone-key-gap);
+    }
 
-            .key {
-                font-size: 14px;
-                padding: 6px;
-            }
+    /* Make ALL buttons the same base height on iPhone */
+    .key,
+    .function-row .key {
+        min-height: var(--iphone-key-h);
+        padding: 6px;
+        font-size: 14px;
+    }
 
-            .key.number {
-                font-size: 16px;
-            }
+    .key.number {
+        font-size: 16px;
+    }
 
-            .key.function,
-            .key.special,
-            .key.math {
-                font-size: 9px;
-            }
-        }
+    .key.function,
+    .key.special,
+    .key.math {
+        font-size: 12px;
+    }
+
+    .key.enter,
+    .key.plus {
+        min-height: calc(var(--iphone-key-h) * 2 + var(--iphone-key-gap));
+    }
+}
     </style>
 </head>
 <body>
