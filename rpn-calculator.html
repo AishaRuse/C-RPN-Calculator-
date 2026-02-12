@@ -281,200 +281,172 @@
         }
 
         /* ============================================
-           IPAD LANDSCAPE - 768px to 1024px width
-           Side-by-side layout, all 12 registers
+           IPHONE LANDSCAPE - Under 768px width
+           Side-by-side, function buttons under stack, 4 registers
            ============================================ */
         
-        /*
-           NOTE: Many iPads report 1366px width in landscape (e.g., 12.9" models),
-           so we target up to 1366px to ensure the iPad rules actually apply.
-        */
-        @media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
-            /* iPad landscape: occupy the full viewport (remove bottom grey line) */
-            body {
-                padding: 0;
+         - Under 768px width
+           Side-by-side, function buttons under stack, 4 registers
+           ============================================ */
+        
+        
+        /* iPad (including iPad Air 2025) - Landscape */
+        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: landscape) {
+            html, body {
+                width: 100%;
+                height: 100%;
                 margin: 0;
-                align-items: stretch;
-                justify-content: stretch;
-                background: #2a2a2a; /* ensures no visible "seams" around the shell */
+                padding: 0;
+                overflow: hidden;
+                background: #2a2a2a;
             }
 
             .calculator {
                 position: fixed;
                 inset: 0;
-                padding: 20px;
-                gap: 20px;
-                width: auto;
+                width: 100%;
+                height: 100dvh;
                 max-width: none;
-                height: auto;
-                /* Square top corners to remove grey triangles */
+                padding: 16px;
+                padding-top: calc(16px + env(safe-area-inset-top));
+                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+                gap: 16px;
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
-            }
-
-            .left-panel {
-                gap: 15px;
-            }
-
-            .right-panel {
-                gap: 12px;
+                box-shadow: none;
+                overflow: hidden;
             }
 
             .stack-display {
-                max-height: 60vh;
+                max-height: none;
+                min-height: 0;
+            }
+            /* Slightly taller function keys (memory/stack/orange rows) */
+            .function-row .key.special,
+            .function-row .key.function,
+            .function-row .key.math {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                min-height: 50px;
             }
 
-            .mode-btn {
-                padding: 8px;
-                font-size: 12px;
-            }
-
-            .function-row {
-                gap: 6px;
-            }
-
-            .function-row .key {
-                font-size: 11px;
-                padding: 8px 4px;
-            }
-
+            /* Shrink keypad keys slightly so the overall layout fits cleanly */
             .keypad {
                 gap: 6px;
             }
 
-            .key {
-                font-size: 16px;
-                padding: 8px;
+            .keypad .key {
+                font-size: 15px;
+                padding: 6px;
             }
 
-            .key.number {
-                font-size: 18px;
+            .keypad .key.number {
+                font-size: 17px;
             }
+
         }
 
-        /* ============================================
-           IPAD PORTRAIT - 768px to 1024px width
-           Vertical layout, all 12 registers
-           ============================================ */
-        
-        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) and (pointer: coarse) {
-            /* iPad portrait: fill the viewport and ensure the keypad expands to the bottom */
-            body {
-                padding: 0;
+
+        /* iPad (including iPad Air 2025) - Portrait */
+        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: portrait) {
+            html, body {
+                width: 100%;
+                height: 100%;
                 margin: 0;
+                padding: 0;
+                overflow: hidden;
                 background: #2a2a2a;
-                align-items: stretch;
-                justify-content: stretch;
             }
 
             .calculator {
                 position: fixed;
                 inset: 0;
-                flex-direction: column;
-                padding: 10px;
-                gap: 8px;
-                width: auto;
+                width: 100%;
+                height: 100dvh;
                 max-width: none;
-                height: auto;
-                /* keep the same shell feel but avoid any inset gaps */
-                border-radius: 0;
+                flex-direction: column;
+                padding: 12px;
+                padding-top: calc(12px + env(safe-area-inset-top));
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                gap: 10px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                box-shadow: none;
+                overflow: hidden;
             }
 
             .left-panel,
             .right-panel {
                 width: 100%;
-                min-height: 0;
+                min-width: 0;
             }
 
+            /* Let keypad expand to fill the remaining height */
             .left-panel {
-                gap: 8px;
                 flex: 0 0 auto;
+                gap: 8px;
             }
 
             .right-panel {
-                gap: 8px;
+                flex: 1 1 auto;
                 min-height: 0;
-                flex: 1 1 auto; /* allows keypad area to grow to fill the screen */
+                gap: 8px;
             }
 
+            /* Reduce button sizes slightly so everything fits */
             .mode-btn {
-                padding: 8px;
-                font-size: 13px;
+                padding: 7px;
+                font-size: 15px;
             }
 
-            .memory-indicator {
-                font-size: 11px;
-                min-height: 16px;
+            .calc-btn {
+                font-size: 18px;
+                min-height: 54px;
+            }
+
+            .btn-large {
+                min-height: 70px;
+            }
+
+            .keypad {
+                gap: 7px;
+                min-height: 0;
             }
 
             .stack-display {
-                flex: none;
-                height: 24vh;
-                min-height: 160px;
+                max-height: 36vh;
+            }
+            /* Slightly taller function keys (memory/stack/orange rows) */
+            .function-row .key.special,
+            .function-row .key.function,
+            .function-row .key.math {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                min-height: 52px;
             }
 
-            .stack-row {
-                padding: 6px 8px;
-                margin: 1px 0;
-            }
-
-            .stack-label {
-                font-size: 12px;
-            }
-
-            .stack-value {
-                font-size: 15px;
-            }
-
-            .input-display {
-                padding: 10px;
-                min-height: 46px;
-            }
-
-            .input-value {
-                font-size: 20px;
-            }
-
-            .function-section {
-                gap: 6px;
-                flex: none;
-            }
-
-            .function-row {
-                gap: 5px;
-            }
-
-            .function-row .key {
-                font-size: 10px;
-                padding: 8px 4px;
-            }
-
-            /* Let keypad take remaining space; reduce key size slightly to fit exactly */
+            /* Shrink keypad keys slightly so everything fits in portrait */
             .keypad {
-                flex: 1;
-                min-height: 0;
-                height: auto;
-                gap: 5px;
+                gap: 6px;
             }
 
-            .key {
-                font-size: 15px;
-                padding: 6px;
+            .keypad .key {
+                font-size: 14px;
+                padding: 5px;
             }
 
-            .key.number {
-                font-size: 17px;
+            .keypad .key.number {
+                font-size: 16px;
             }
+
         }
 
-        /* ============================================
-           IPHONE LANDSCAPE - Under 768px width
-           Side-by-side, function buttons under stack, 4 registers
-           ============================================ */
-        
-        @media (max-width: 767px) and (orientation: landscape) {
+
+@media (max-width: 767px) and (orientation: landscape) {
             body {
                 padding: 5px;
             }
