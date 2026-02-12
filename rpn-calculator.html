@@ -286,10 +286,25 @@
            ============================================ */
         
         @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            /* iPad landscape: fill the viewport (no bottom grey bar) */
+            body {
+                padding: 0;
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
             .calculator {
                 padding: 20px;
                 gap: 20px;
-                height: 96vh;
+                width: 100%;
+                max-width: none;
+                height: 100vh;
+                height: 100dvh;
+                /* Square top corners to remove grey triangles */
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
             }
 
             .left-panel {
@@ -338,17 +353,20 @@
            ============================================ */
         
         @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            /* iPad portrait: tighten spacing so the full calculator fits without clipping */
             .calculator {
                 flex-direction: column;
-                padding: 12px;
-                gap: 10px;
-                height: 98vh;
+                padding: 10px;
+                gap: 8px;
+                height: 100vh;
+                height: 100dvh;
             }
 
             .left-panel,
             .right-panel {
                 width: 100%;
                 flex: none;
+                min-height: 0;
             }
 
             .left-panel {
@@ -357,6 +375,7 @@
 
             .right-panel {
                 gap: 8px;
+                min-height: 0;
             }
 
             .mode-btn {
@@ -370,8 +389,9 @@
             }
 
             .stack-display {
-                height: 25vh;
-                min-height: 180px;
+                flex: none;
+                height: 24vh;
+                min-height: 160px;
             }
 
             .stack-row {
@@ -389,7 +409,7 @@
 
             .input-display {
                 padding: 10px;
-                min-height: 50px;
+                min-height: 46px;
             }
 
             .input-value {
@@ -398,28 +418,33 @@
 
             .function-section {
                 gap: 6px;
+                flex: none;
             }
 
             .function-row {
-                gap: 6px;
+                gap: 5px;
             }
 
             .function-row .key {
-                font-size: 11px;
-                padding: 10px 6px;
+                font-size: 10px;
+                padding: 8px 4px;
             }
 
+            /* Let keypad take remaining space; reduce key size slightly to fit exactly */
             .keypad {
-                height: 48vh;
-                gap: 6px;
+                flex: 1;
+                min-height: 0;
+                height: auto;
+                gap: 5px;
             }
 
             .key {
-                font-size: 16px;
+                font-size: 15px;
+                padding: 6px;
             }
 
             .key.number {
-                font-size: 18px;
+                font-size: 17px;
             }
         }
 
