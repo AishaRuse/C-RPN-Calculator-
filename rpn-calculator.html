@@ -475,6 +475,8 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
+        background: #2a2a2a;
+        background: #2a2a2a;
     }
 
     body {
@@ -488,24 +490,25 @@
         position: fixed;
         inset: 0;
         width: 100vw;
+        height: 100svh;
         height: 100dvh;
-        padding: calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right))
-                 calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
-        gap: 6px;
+        padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
+                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+        gap: 4px;
         border-radius: 0;
 
-        --iphone-key-h: clamp(24px, 6.0vh, 32px);
-        --iphone-key-gap: 4px;
+        --iphone-key-h: clamp(20px, 5.2vh, 28px);
+        --iphone-key-gap: 3px;
     }
 
     .left-panel,
     .right-panel {
-        gap: 6px;
+        gap: 4px;
         min-width: 0;
     }
 
     .mode-btn {
-        padding: 4px;
+        padding: 3px;
         font-size: 10px;
         border-radius: 6px;
     }
@@ -538,7 +541,7 @@
     /* Landscape can have a shorter input field */
     .input-display {
         padding: 6px;
-        min-height: 24px;
+        min-height: 20px;
     }
 
     .input-value {
@@ -594,6 +597,8 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
+        background: #2a2a2a;
+        background: #2a2a2a;
     }
 
     body {
@@ -607,21 +612,22 @@
         position: fixed;
         inset: 0;
         width: 100vw;
+        height: 100svh;
         height: 100dvh;
         flex-direction: column;
-        padding: calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right))
-                 calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
-        gap: 6px;
+        padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
+                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+        gap: 4px;
         border-radius: 0;
 
-        --iphone-key-h: clamp(32px, 4.2vh, 44px);
-        --iphone-key-gap: 6px;
+        --iphone-key-h: clamp(30px, 3.8vh, 40px);
+        --iphone-key-gap: 5px;
     }
 
     .left-panel {
         width: 100%;
         flex: 0 0 auto;
-        gap: 6px;
+        gap: 4px;
         min-width: 0;
     }
 
@@ -629,12 +635,12 @@
         width: 100%;
         flex: 1 1 auto;
         min-height: 0;
-        gap: 6px;
+        gap: 4px;
         min-width: 0;
     }
 
     .mode-btn {
-        padding: 7px;
+        padding: 6px;
         font-size: 12px;
         border-radius: 8px;
     }
@@ -646,7 +652,7 @@
 
     .stack-display {
         flex: 0 0 auto;
-        max-height: 24vh;
+        max-height: 20vh;
         min-height: 90px;
         padding: 6px;
         overflow-y: auto;
