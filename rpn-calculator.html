@@ -285,21 +285,28 @@
            Side-by-side layout, all 12 registers
            ============================================ */
         
-        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-            /* iPad landscape: fill the viewport (no bottom grey bar) */
+        /*
+           NOTE: Many iPads report 1366px width in landscape (e.g., 12.9" models),
+           so we target up to 1366px to ensure the iPad rules actually apply.
+        */
+        @media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+            /* iPad landscape: occupy the full viewport (remove bottom grey line) */
             body {
                 padding: 0;
+                margin: 0;
                 align-items: stretch;
                 justify-content: stretch;
+                background: #2a2a2a; /* ensures no visible "seams" around the shell */
             }
 
             .calculator {
+                position: fixed;
+                inset: 0;
                 padding: 20px;
                 gap: 20px;
-                width: 100%;
+                width: auto;
                 max-width: none;
-                height: 100vh;
-                height: 100dvh;
+                height: auto;
                 /* Square top corners to remove grey triangles */
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
@@ -352,30 +359,44 @@
            Vertical layout, all 12 registers
            ============================================ */
         
-        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-            /* iPad portrait: tighten spacing so the full calculator fits without clipping */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) and (pointer: coarse) {
+            /* iPad portrait: fill the viewport and ensure the keypad expands to the bottom */
+            body {
+                padding: 0;
+                margin: 0;
+                background: #2a2a2a;
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
             .calculator {
+                position: fixed;
+                inset: 0;
                 flex-direction: column;
                 padding: 10px;
                 gap: 8px;
-                height: 100vh;
-                height: 100dvh;
+                width: auto;
+                max-width: none;
+                height: auto;
+                /* keep the same shell feel but avoid any inset gaps */
+                border-radius: 0;
             }
 
             .left-panel,
             .right-panel {
                 width: 100%;
-                flex: none;
                 min-height: 0;
             }
 
             .left-panel {
                 gap: 8px;
+                flex: 0 0 auto;
             }
 
             .right-panel {
                 gap: 8px;
                 min-height: 0;
+                flex: 1 1 auto; /* allows keypad area to grow to fill the screen */
             }
 
             .mode-btn {
