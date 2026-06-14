@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>HP-Style RPN Calculator v1.2</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RPN Calc">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- App Icons for iOS -->
+    <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="icon-180.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        /* ============================================
+           DEFAULT LAYOUT - DESKTOP & LARGE SCREENS
+           ============================================ */
+        
+        .calculator {
+            background: #2a2a2a;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 1200px;
+            height: 95vh;
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 0;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 7px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #444;
+            color: #aaa;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .memory-indicator {
+            color: #ff6b35;
+            font-size: 12px;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .stack-display {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .stack-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin: 2px 0;
+            border-radius: 5px;
+            background: #252525;
+        }
+
+        .stack-row.x-register {
+            background: #333;
+            border: 2px solid #ff6b35;
+        }
+
+        .stack-label {
+            color: #888;
+            font-weight: bold;
+            min-width: 30px;
+            font-size: 14px;
+        }
+
+        .stack-value {
+            color: #0f0;
+            font-size: 17px;
+            text-align: right;
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .input-display {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 60px;
+        }
+
+        .input-value {
+            color: #fff;
+            font-size: 24px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .input-value.error {
+            color: #ff5555;
+            letter-spacing: 1px;
+        }
+
+        .function-section {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .function-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            flex: 1;
+        }
+
+        .key {
+            background: #444;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 4px 0 #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .key:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #222;
+        }
+
+        .key:hover {
+            background: #555;
+        }
+
+        .key.number {
+            background: #555;
+        }
+
+        .key.number:hover {
+            background: #666;
+        }
+
+        .key.operator {
+            background: #ff6b35;
+        }
+
+        .key.operator:hover {
+            background: #ff8555;
+        }
+
+        .key.enter {
+            background: #4CAF50;
+            grid-row: span 2;
+        }
+
+        .key.enter:hover {
+            background: #5cb85c;
+        }
+
+        .key.plus {
+            grid-row: span 2;
+        }
+
+        .key.zero {
+            grid-column: span 2;
+        }
+
+        .key.function {
+            background: #2196F3;
+            font-size: 14px;
+        }
+
+        .key.function:hover {
+            background: #42a5f5;
+        }
+
+        .key.special {
+            background: #9C27B0;
+            font-size: 14px;
+        }
+
+        .key.special:hover {
+            background: #ab47bc;
+        }
+
+        .key.math {
+            background: #FF9800;
+            font-size: 14px;
+        }
+
+        .key.math:hover {
+            background: #FFa726;
+        }
+
+        .key.transparent {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .key.transparent:hover {
+            background: transparent;
+        }
+
+        .key.transparent:active {
+            transform: none;
+        }
+
+        /* ============================================
+           IPHONE LANDSCAPE - Under 768px width
+           Side-by-side, function buttons under stack, 4 registers
+           ============================================ */
+
+        /* iPad (including iPad Air 2025) - Landscape */
+        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: landscape) {
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: #2a2a2a;
+            }
+
+            .calculator {
+                position: fixed;
+                inset: 0;
+                width: 100%;
+                height: 100dvh;
+                max-width: none;
+                padding: 16px;
+                padding-top: calc(16px + env(safe-area-inset-top));
+                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+                gap: 16px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                box-shadow: none;
+                overflow: hidden;
+            }
+
+            .stack-display {
+                max-height: none;
+                min-height: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                background: #2a2a2a;
+                overflow: hidden;
+            }
+
+            .calculator {
+                transform: translateZ(0);
+            }
+
+            :root {
+                --ipad-key-h: clamp(50px, 6.2vh, 64px);
+                --ipad-key-gap: 5px;
+            }
+
+            /* Make ALL keys the same height on iPad */
+            .key {
+                min-height: var(--ipad-key-h);
+                padding: 6px;
+                font-size: 15px;
+            }
+
+            .key.number {
+                font-size: 17px;
+            }
+
+            .function-section {
+                gap: var(--ipad-key-gap);
+            }
+
+            .function-row {
+                gap: var(--ipad-key-gap);
+            }
+
+            .keypad {
+                gap: var(--ipad-key-gap);
+            }
+
+            /* Keep big keys proportional */
+            .key.enter,
+            .key.plus {
+                min-height: calc(var(--ipad-key-h) * 2 + var(--ipad-key-gap));
+            }
+
+        }
+
+
+        /* iPad (including iPad Air 2025) - Portrait */
+        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: portrait) {
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: #2a2a2a;
+            }
+
+            .calculator {
+                position: fixed;
+                inset: 0;
+                width: 100%;
+                height: 100dvh;
+                max-width: none;
+                flex-direction: column;
+                padding: 10px;
+                padding-top: calc(12px + env(safe-area-inset-top));
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                gap: 10px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                box-shadow: none;
+                overflow: hidden;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                min-width: 0;
+            }
+
+            /* Let keypad expand to fill the remaining height */
+            .left-panel {
+                flex: 0 0 auto;
+                gap: 8px;
+            }
+
+            .right-panel {
+                flex: 1 1 auto;
+                min-height: 0;
+                gap: 8px;
+            }
+
+            /* Reduce button sizes slightly so everything fits */
+            .mode-btn {
+                padding: 7px;
+                font-size: 15px;
+            }
+            .stack-display {
+                max-height: 24vh;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                background: #2a2a2a;
+                overflow: hidden;
+            }
+
+            .calculator {
+                transform: translateZ(0);
+            }
+
+            :root {
+                --ipad-key-h: clamp(40px, 4.3vh, 50px);
+                --ipad-key-gap: 5px;
+            }
+
+            /* Make ALL keys the same height on iPad */
+            .key {
+                min-height: var(--ipad-key-h);
+                padding: 6px;
+                font-size: 15px;
+            }
+
+            .key.number {
+                font-size: 17px;
+            }
+
+            .function-section {
+                gap: var(--ipad-key-gap);
+            }
+
+            .function-row {
+                gap: var(--ipad-key-gap);
+            }
+
+            .keypad {
+                gap: var(--ipad-key-gap);
+            }
+
+            /* Keep big keys proportional */
+            .key.enter,
+            .key.plus {
+                min-height: calc(var(--ipad-key-h) * 2 + var(--ipad-key-gap));
+            }
+
+        }
+
+
+@media (max-width: 767px) and (orientation: landscape) {
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #2a2a2a;
+        background: #2a2a2a;
+    }
+
+    body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+    }
+
+    .calculator {
+        /* iPhone landscape: fill the visible viewport and avoid any vertical overflow */
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100svh;
+        height: 100dvh;
+        padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
+                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+        gap: 4px;
+        border-radius: 0;
+
+        --iphone-key-h: clamp(20px, 5.2vh, 28px);
+        --iphone-key-gap: 3px;
+    }
+
+    .left-panel,
+    .right-panel {
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .mode-btn {
+        padding: 3px;
+        font-size: 10px;
+        border-radius: 6px;
+    }
+
+    .memory-indicator {
+        font-size: 8px;
+        min-height: 10px;
+    }
+
+    .stack-display {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 6px;
+    }
+
+    .stack-row {
+        padding: 2px 4px;
+        margin: 1px 0;
+    }
+
+    .stack-label {
+        font-size: 9px;
+        min-width: 18px;
+    }
+
+    .stack-value {
+        font-size: 10px;
+    }
+
+    /* Landscape can have a shorter input field */
+    .input-display {
+        padding: 6px;
+        min-height: 20px;
+    }
+
+    .input-value {
+        font-size: 13px;
+    }
+
+    .function-section {
+        gap: var(--iphone-key-gap);
+        flex: 0 0 auto;
+    }
+
+    .function-row {
+        gap: var(--iphone-key-gap);
+    }
+
+    .keypad {
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: var(--iphone-key-gap);
+    }
+
+    /* Make ALL buttons the same base height on iPhone */
+    .key,
+    .function-row .key {
+        min-height: var(--iphone-key-h);
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .key.number {
+        font-size: 14px;
+    }
+
+    .key.function,
+    .key.special,
+    .key.math {
+        font-size: 10px;
+    }
+
+    .key.enter,
+    .key.plus {
+        min-height: calc(var(--iphone-key-h) * 2 + var(--iphone-key-gap));
+    }
+}
+
+        /* ============================================
+           IPHONE PORTRAIT - Under 768px width
+           Vertical layout, 6 registers
+           ============================================ */
+        
+        @media (max-width: 767px) and (orientation: portrait) {
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #2a2a2a;
+        background: #2a2a2a;
+    }
+
+    body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+    }
+
+    .calculator {
+        /* iPhone portrait: fill the visible viewport and avoid keypad cutoff */
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100svh;
+        height: 100dvh;
+        flex-direction: column;
+        padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
+                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+        gap: 4px;
+        border-radius: 0;
+
+        --iphone-key-h: clamp(30px, 3.8vh, 40px);
+        --iphone-key-gap: 5px;
+    }
+
+    .left-panel {
+        width: 100%;
+        flex: 0 0 auto;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .right-panel {
+        width: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .mode-btn {
+        padding: 6px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+
+    .memory-indicator {
+        font-size: 9px;
+        min-height: 12px;
+    }
+
+    .stack-display {
+        flex: 0 0 auto;
+        max-height: 20vh;
+        min-height: 90px;
+        padding: 6px;
+        overflow-y: auto;
+    }
+
+    .stack-row {
+        padding: 3px 5px;
+        margin: 1px 0;
+    }
+
+    .stack-label {
+        font-size: 10px;
+    }
+
+    .stack-value {
+        font-size: 12px;
+    }
+
+    .input-display {
+        padding: 8px;
+        min-height: 34px;
+    }
+
+    .input-value {
+        font-size: 16px;
+    }
+
+    .function-section {
+        gap: var(--iphone-key-gap);
+        flex: 0 0 auto;
+    }
+
+    .function-row {
+        gap: var(--iphone-key-gap);
+    }
+
+    .keypad {
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: var(--iphone-key-gap);
+    }
+
+    /* Make ALL buttons the same base height on iPhone */
+    .key,
+    .function-row .key {
+        min-height: var(--iphone-key-h);
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    .key.number {
+        font-size: 16px;
+    }
+
+    .key.function,
+    .key.special,
+    .key.math {
+        font-size: 12px;
+    }
+
+    .key.enter,
+    .key.plus {
+        min-height: calc(var(--iphone-key-h) * 2 + var(--iphone-key-gap));
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="left-panel">
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="decimal">Decimal</button>
+                <button class="mode-btn" data-mode="integer">Integer</button>
+                <button class="mode-btn" data-mode="currency">Currency</button>
+            </div>
+
+            <div class="memory-indicator" id="memoryIndicator"></div>
+
+            <div class="stack-display" id="stackDisplay"></div>
+
+            <!-- Function buttons (visible in iPhone landscape, hidden in other layouts) -->
+            <div class="function-section" id="leftFunctions" style="display: none;">
+                <div class="function-row">
+                    <button class="key special" data-key="STO">STO</button>
+                    <button class="key special" data-key="RCL">RCL</button>
+                    <button class="key special" data-key="RCL+">RCL+</button>
+                    <button class="key special" data-key="RCL-">RCL−</button>
+                </div>
+                <div class="function-row">
+                    <button class="key special" data-key="STO+">STO+</button>
+                    <button class="key special" data-key="STO-">STO−</button>
+                    <button class="key special" data-key="STO*">STO×</button>
+                    <button class="key special" data-key="STO/">STO÷</button>
+                </div>
+                <div class="function-row">
+                    <button class="key function" data-key="CLEAR">CLEAR</button>
+                    <button class="key function" data-key="DROP">DROP</button>
+                    <button class="key function" data-key="SWAP">SWAP</button>
+                    <button class="key function" data-key="CLX">CLX</button>
+                </div>
+                <div class="function-row">
+                    <button class="key function" data-key="ROLL↑">ROLL↑</button>
+                    <button class="key function" data-key="ROLL↓">ROLL↓</button>
+                    <button class="key function" data-key="LASTX">LASTX</button>
+                    <button class="key math" data-key="CHS">CHS</button>
+                </div>
+                <div class="function-row">
+                    <button class="key math" data-key="1/x">1/x</button>
+                    <button class="key math" data-key="Δ%">Δ%</button>
+                    <button class="key transparent"></button>
+                    <button class="key transparent"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="input-display">
+                <div class="input-value" id="inputDisplay">0</div>
+            </div>
+
+            <!-- Function buttons (visible in all layouts except iPhone landscape) -->
+            <div class="function-section" id="rightFunctions">
+                <div class="function-row">
+                    <button class="key special" data-key="STO">STO</button>
+                    <button class="key special" data-key="RCL">RCL</button>
+                    <button class="key special" data-key="RCL+">RCL+</button>
+                    <button class="key special" data-key="RCL-">RCL−</button>
+                </div>
+                <div class="function-row">
+                    <button class="key special" data-key="STO+">STO+</button>
+                    <button class="key special" data-key="STO-">STO−</button>
+                    <button class="key special" data-key="STO*">STO×</button>
+                    <button class="key special" data-key="STO/">STO÷</button>
+                </div>
+                <div class="function-row">
+                    <button class="key function" data-key="CLEAR">CLEAR</button>
+                    <button class="key function" data-key="DROP">DROP</button>
+                    <button class="key function" data-key="SWAP">SWAP</button>
+                    <button class="key function" data-key="CLX">CLX</button>
+                </div>
+                <div class="function-row">
+                    <button class="key function" data-key="ROLL↑">ROLL↑</button>
+                    <button class="key function" data-key="ROLL↓">ROLL↓</button>
+                    <button class="key function" data-key="LASTX">LASTX</button>
+                    <button class="key transparent"></button>
+                </div>
+                <div class="function-row">
+                    <button class="key math" data-key="CHS">CHS</button>
+                    <button class="key math" data-key="1/x">1/x</button>
+                    <button class="key math" data-key="Δ%">Δ%</button>
+                    <button class="key transparent"></button>
+                </div>
+            </div>
+
+            <div class="keypad">
+                <button class="key operator" data-key="%">%</button>
+                <button class="key operator" data-key="/">/</button>
+                <button class="key operator" data-key="*">×</button>
+                <button class="key operator" data-key="-">−</button>
+                
+                <button class="key number" data-key="7">7</button>
+                <button class="key number" data-key="8">8</button>
+                <button class="key number" data-key="9">9</button>
+                <button class="key operator plus" data-key="+">+</button>
+                
+                <button class="key number" data-key="4">4</button>
+                <button class="key number" data-key="5">5</button>
+                <button class="key number" data-key="6">6</button>
+                
+                <button class="key number" data-key="1">1</button>
+                <button class="key number" data-key="2">2</button>
+                <button class="key number" data-key="3">3</button>
+                <button class="key enter" data-key="ENTER">ENTER</button>
+                
+                <button class="key number zero" data-key="0">0</button>
+                <button class="key number" data-key=".">.</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        /* ============================================================
+           HP-style RPN engine
+           - Automatic stack lift (genuine HP behaviour)
+           - LASTx, memory + memory arithmetic, error state on bad ops
+           ============================================================ */
+        class RPNCalculator {
+            constructor() {
+                this.STACK_SIZE = 12;
+                this.mode = 'decimal';
+                this.memory = 0;
+                this.PRECISION = 10;        // HP-12C style: 10 significant digits
+                this.reset();
+            }
+
+            reset() {
+                this.stack = new Array(this.STACK_SIZE).fill(0);
+                this.entry = '';            // digit-entry buffer; '' = not entering
+                this.lift = false;          // is stack lift armed for the next entry?
+                this.lastX = 0;
+                this.error = false;
+            }
+
+            /* ---- internal helpers ----------------------------------- */
+            clearError() {
+                if (this.error) {
+                    this.error = false;
+                    this.entry = '';
+                    this.lift = false;
+                    this.stack[0] = 0;
+                }
+            }
+
+            commit() {
+                // Settle the typed number into X. Completing an entry arms stack lift.
+                if (this.entry !== '') {
+                    this.stack[0] = parseFloat(this.entry) || 0;
+                    this.entry = '';
+                    this.lift = true;
+                }
+            }
+
+            liftStack() {
+                this.stack.unshift(this.stack[0]);
+                this.stack.pop();
+            }
+
+            // Binary-op drop: remove X, put result in X, duplicate the top register (HP T-fill).
+            dropWithResult(result) {
+                this.stack.shift();
+                this.stack[0] = result;
+                this.stack.push(this.stack[this.stack.length - 1]);
+            }
+
+            setResult(value) {
+                if (!isFinite(value)) { this.error = true; return false; }
+                this.stack[0] = value;
+                return true;
+            }
+
+            /* ---- digit entry ---------------------------------------- */
+            inputDigit(d) {
+                this.clearError();
+                if (this.entry === '') {
+                    if (this.lift) this.liftStack();
+                    this.lift = false;
+                }
+                if (this.entry === '0') this.entry = '';        // no leading zeros
+                else if (this.entry === '-0') this.entry = '-';
+                this.entry += d;
+                this.stack[0] = parseFloat(this.entry) || 0;
+            }
+
+            inputDot() {
+                if (this.mode === 'integer') return;
+                this.clearError();
+                if (this.entry === '') {
+                    if (this.lift) this.liftStack();
+                    this.lift = false;
+                    this.entry = '0';
+                } else if (this.entry === '-') {
+                    this.entry = '-0';
+                } else if (this.entry.includes('.')) {
+                    return;                                     // only one decimal point
+                }
+                this.entry += '.';
+                this.stack[0] = parseFloat(this.entry) || 0;
+            }
+
+            backspace() {
+                if (this.error) { this.clearError(); return; }
+                if (this.entry !== '') {
+                    this.entry = this.entry.slice(0, -1);
+                    if (this.entry === '' || this.entry === '-') {
+                        this.entry = '';
+                        this.stack[0] = 0;
+                        this.lift = false;
+                    } else {
+                        this.stack[0] = parseFloat(this.entry) || 0;
+                    }
+                } else {
+                    this.clearX();
+                }
+            }
+
+            changeSign() {
+                if (this.error) return;
+                if (this.entry !== '') {
+                    this.entry = this.entry.startsWith('-')
+                        ? this.entry.slice(1)
+                        : '-' + this.entry;
+                    this.stack[0] = parseFloat(this.entry) || 0;
+                } else {
+                    this.stack[0] = -this.stack[0];
+                }
+            }
+
+            /* ---- stack control -------------------------------------- */
+            enter() {
+                if (this.error) return;
+                this.commit();
+                this.liftStack();           // duplicate X into Y
+                this.lift = false;          // ENTER disables stack lift
+            }
+
+            clearX() {
+                this.entry = '';
+                this.stack[0] = 0;
+                this.lift = false;          // CLx disables stack lift
+                this.error = false;
+            }
+
+            clear() {
+                this.reset();
+            }
+
+            drop() {
+                if (this.error) { this.clearError(); return; }
+                this.entry = '';
+                this.stack.shift();
+                this.stack.push(this.stack[this.stack.length - 1]);
+                this.lift = true;
+            }
+
+            swap() {
+                if (this.error) return;
+                this.commit();
+                const t = this.stack[0];
+                this.stack[0] = this.stack[1];
+                this.stack[1] = t;
+                this.lift = true;
+            }
+
+            rollDown() {
+                if (this.error) return;
+                this.commit();
+                this.stack.push(this.stack.shift());    // X wraps to top
+                this.lift = true;
+            }
+
+            rollUp() {
+                if (this.error) return;
+                this.commit();
+                this.stack.unshift(this.stack.pop());   // top wraps to X
+                this.lift = true;
+            }
+
+            /* ---- arithmetic ----------------------------------------- */
+            operation(op) {
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                const y = this.stack[1];
+                let result;
+                switch (op) {
+                    case '+': result = y + x; break;
+                    case '-': result = y - x; break;
+                    case '*': result = y * x; break;
+                    case '/':
+                        if (x === 0) { this.lastX = x; this.error = true; return; }
+                        result = y / x; break;
+                    default: return;
+                }
+                if (!isFinite(result)) { this.lastX = x; this.error = true; return; }
+                this.lastX = x;
+                this.dropWithResult(result);
+                this.lift = true;
+            }
+
+            percent() {
+                // HP %: result in X, Y preserved  (e.g. 200 ENTER 8 % -> 16, Y still 200)
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                const y = this.stack[1];
+                this.lastX = x;
+                if (!this.setResult(y * x / 100)) return;
+                this.lift = true;
+            }
+
+            deltaPercent() {
+                // HP %CHG: ((x - y) / y) * 100, result in X, Y preserved
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                const y = this.stack[1];
+                if (y === 0) { this.lastX = x; this.error = true; return; }
+                this.lastX = x;
+                if (!this.setResult((x - y) / y * 100)) return;
+                this.lift = true;
+            }
+
+            reciprocal() {
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                this.lastX = x;
+                if (x === 0) { this.error = true; return; }     // 1/0 -> Error
+                this.setResult(1 / x);
+                this.lift = true;
+            }
+
+            recallLastX() {
+                if (this.error) return;
+                this.commit();
+                if (this.lift) this.liftStack();                // LASTx lifts the stack
+                this.stack[0] = this.lastX;
+                this.lift = true;
+            }
+
+            /* ---- memory --------------------------------------------- */
+            store() {
+                if (this.error) return;
+                this.commit();
+                this.memory = this.stack[0];
+                this.lift = true;
+            }
+
+            recall() {
+                if (this.error) return;
+                this.commit();
+                if (this.lift) this.liftStack();                // RCL lifts the stack
+                this.stack[0] = this.memory;
+                this.lift = true;
+            }
+
+            storeOp(op) {
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                switch (op) {
+                    case '+': this.memory += x; break;
+                    case '-': this.memory -= x; break;
+                    case '*': this.memory *= x; break;
+                    case '/':
+                        if (x === 0) { this.error = true; return; }
+                        this.memory /= x; break;
+                }
+                if (!isFinite(this.memory)) { this.memory = 0; this.error = true; return; }
+                this.lift = true;
+            }
+
+            recallOp(op) {
+                // X (op) memory, result replaces X
+                if (this.error) return;
+                this.commit();
+                const x = this.stack[0];
+                this.lastX = x;
+                if (op === '+') { if (!this.setResult(x + this.memory)) return; }
+                else if (op === '-') { if (!this.setResult(x - this.memory)) return; }
+                this.lift = true;
+            }
+
+            /* ---- formatting ----------------------------------------- */
+            formatValue(value) {
+                if (this.mode === 'integer') return this.formatInteger(value);
+                if (this.mode === 'currency') return this.formatCurrency(value);
+                return this.formatDecimal(value);
+            }
+
+            formatInteger(value) {
+                if (!isFinite(value)) return value > 0 ? '\u221e' : '-\u221e';
+                return Math.round(value).toString();
+            }
+
+            formatCurrency(value) {
+                if (!isFinite(value)) return value > 0 ? '\u221e' : '-\u221e';
+                const neg = value < 0;
+                const parts = Math.abs(value).toFixed(2).split('.');
+                const grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return (neg ? '-' : '') + grouped + '.' + parts[1];
+            }
+
+            formatDecimal(value) {
+                if (!isFinite(value)) return value > 0 ? '\u221e' : '-\u221e';
+                if (value === 0 || Math.abs(value) < 5e-11) return '0';
+                // Round to PRECISION significant digits to remove binary FP noise
+                // (e.g. 0.1 + 0.2 -> 0.3 rather than 0.30000000000000004).
+                return parseFloat(value.toPrecision(this.PRECISION)).toString();
+            }
+        }
+
+        const calc = new RPNCalculator();
+
+        /* ============================================================
+           Display + responsive layout (iPhone / iPad / desktop)
+           ============================================================ */
+        const STACK_LABELS = ['X:', 'Y:', 'Z:', 'T:', '4:', '5:', '6:', '7:', '8:', '9:', '10:', '11:'];
+        let stackValueEls = [];
+        let currentRegisters = -1;
+
+        function computeRegisters() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const landscape = w > h;
+            if (w <= 767) return landscape ? 4 : 6;     // iPhone
+            return 12;                                    // iPad & desktop
+        }
+
+        function buildStack(n) {
+            const stackDisplay = document.getElementById('stackDisplay');
+            stackDisplay.innerHTML = '';
+            stackValueEls = [];
+            for (let i = 0; i < n; i++) {
+                const row = document.createElement('div');
+                row.className = 'stack-row' + (i === 0 ? ' x-register' : '');
+
+                const label = document.createElement('div');
+                label.className = 'stack-label';
+                label.textContent = STACK_LABELS[i];
+
+                const value = document.createElement('div');
+                value.className = 'stack-value';
+
+                row.appendChild(label);
+                row.appendChild(value);
+                stackDisplay.appendChild(row);
+                stackValueEls.push(value);
+            }
+            currentRegisters = n;
+        }
+
+        function updateLayout() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const isLandscape = width > height;
+
+            const leftFunctions = document.getElementById('leftFunctions');
+            const rightFunctions = document.getElementById('rightFunctions');
+
+            // iPhone landscape shows the function pad on the left; everything else on the right.
+            if (width <= 767 && isLandscape) {
+                leftFunctions.style.display = 'flex';
+                rightFunctions.style.display = 'none';
+            } else {
+                leftFunctions.style.display = 'none';
+                rightFunctions.style.display = 'flex';
+            }
+
+            const n = computeRegisters();
+            if (n !== currentRegisters) buildStack(n);      // only rebuild rows when the count changes
+        }
+
+        function updateDisplay() {
+            if (currentRegisters < 0) buildStack(computeRegisters());
+
+            const inputDisplay = document.getElementById('inputDisplay');
+            const memoryIndicator = document.getElementById('memoryIndicator');
+
+            // Update only text content of existing rows (no DOM teardown per keypress).
+            for (let i = 0; i < stackValueEls.length; i++) {
+                if (calc.error && i === 0) {
+                    stackValueEls[i].textContent = 'Error';
+                } else if (i === 0 && calc.entry !== '') {
+                    stackValueEls[i].textContent = calc.entry;
+                } else {
+                    stackValueEls[i].textContent = calc.formatValue(calc.stack[i]);
+                }
+            }
+
+            if (calc.error) {
+                inputDisplay.textContent = 'Error';
+                inputDisplay.classList.add('error');
+            } else {
+                inputDisplay.classList.remove('error');
+                inputDisplay.textContent = calc.entry !== ''
+                    ? calc.entry
+                    : calc.formatValue(calc.stack[0]);
+            }
+
+            memoryIndicator.textContent = calc.memory !== 0
+                ? 'Memory: ' + calc.formatValue(calc.memory)
+                : '';
+        }
+
+        /* ============================================================
+           Key handling via dispatch table (replaces the if/else chain)
+           ============================================================ */
+        const keyActions = {
+            'ENTER': () => calc.enter(),
+            '+': () => calc.operation('+'),
+            '-': () => calc.operation('-'),
+            '*': () => calc.operation('*'),
+            '/': () => calc.operation('/'),
+            '%': () => calc.percent(),
+            '\u0394%': () => calc.deltaPercent(),     // Δ%
+            'CHS': () => calc.changeSign(),
+            '1/x': () => calc.reciprocal(),
+            'CLX': () => calc.clearX(),
+            'CLEAR': () => calc.clear(),
+            'DROP': () => calc.drop(),
+            'SWAP': () => calc.swap(),
+            'ROLL\u2191': () => calc.rollUp(),        // ROLL↑
+            'ROLL\u2193': () => calc.rollDown(),      // ROLL↓
+            'LASTX': () => calc.recallLastX(),
+            'STO': () => calc.store(),
+            'RCL': () => calc.recall(),
+            'STO+': () => calc.storeOp('+'),
+            'STO-': () => calc.storeOp('-'),
+            'STO*': () => calc.storeOp('*'),
+            'STO/': () => calc.storeOp('/'),
+            'RCL+': () => calc.recallOp('+'),
+            'RCL-': () => calc.recallOp('-'),
+            '.': () => calc.inputDot()
+        };
+
+        function handleKey(key) {
+            if (key.length === 1 && key >= '0' && key <= '9') {
+                calc.inputDigit(key);
+            } else if (keyActions[key]) {
+                keyActions[key]();
+            } else {
+                return;
+            }
+            updateDisplay();
+        }
+
+        /* ============================================================
+           Input wiring — pointerdown fires on press for mouse, touch
+           and pen alike, so fast successive taps each register instead
+           of being swallowed by the browser's double-tap detection.
+           ============================================================ */
+        document.querySelectorAll('.key').forEach(button => {
+            button.addEventListener('pointerdown', (e) => {
+                if (e.button !== 0) return;             // primary / touch / pen only
+                const key = button.dataset.key;
+                if (key) handleKey(key);
+            });
+        });
+
+        document.querySelectorAll('.mode-btn').forEach(button => {
+            button.addEventListener('pointerdown', (e) => {
+                if (e.button !== 0) return;
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                calc.mode = button.dataset.mode;
+                updateDisplay();
+            });
+        });
+
+        const keyMap = {
+            '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
+            '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
+            '.': '.', ',': '.',
+            'Enter': 'ENTER', '=': 'ENTER',
+            '+': '+', '-': '-', '*': '*', '/': '/',
+            '%': '%',
+            'Delete': 'CLX',
+            'Escape': 'CLEAR'
+        };
+
+        document.addEventListener('keydown', (e) => {
+            // Leave browser / OS shortcuts (copy, refresh, devtools, tab) alone.
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+                calc.backspace();
+                updateDisplay();
+                return;
+            }
+
+            const mapped = keyMap[e.key];
+            if (mapped) {
+                e.preventDefault();                     // only swallow keys we actually use
+                handleKey(mapped);
+            }
+        });
+
+        /* ============================================================
+           Init + responsive updates
+           ============================================================ */
+        updateLayout();
+        updateDisplay();
+
+        let resizeRaf = null;
+        window.addEventListener('resize', () => {
+            if (resizeRaf) cancelAnimationFrame(resizeRaf);
+            resizeRaf = requestAnimationFrame(() => {
+                updateLayout();
+                updateDisplay();
+            });
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateLayout();
+                updateDisplay();
+            }, 100);
+        });
+
+        /* ============================================================
+           PWA service worker. Registration is best-effort: it silently
+           no-ops when the page isn't served over http(s) (e.g. inside a
+           preview sandbox or opened from file://), so it never breaks
+           the app, but works once deployed to GitHub Pages.
+           ============================================================ */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => { /* cache unavailable here */ });
+            });
+        }
+    </script>
+</body>
+</html>
