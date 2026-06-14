@@ -124,12 +124,13 @@
             padding: 8px 10px;
             margin: 2px 0;
             border-radius: 5px;
+            border: 2px solid transparent;
             background: #252525;
         }
 
         .stack-row.x-register {
             background: #333;
-            border: 2px solid #ff6b35;
+            border-color: #ff6b35;
         }
 
         .stack-label {
@@ -313,7 +314,7 @@
                 max-width: none;
                 padding: 16px;
                 padding-top: calc(16px + env(safe-area-inset-top));
-                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+                padding-bottom: max(6px, calc(env(safe-area-inset-bottom) - 8px));
                 gap: 16px;
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
@@ -395,7 +396,7 @@
                 flex-direction: column;
                 padding: 10px;
                 padding-top: calc(12px + env(safe-area-inset-top));
-                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                padding-bottom: max(6px, calc(env(safe-area-inset-bottom) - 8px));
                 gap: 10px;
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
@@ -502,7 +503,7 @@
         height: 100svh;
         height: 100dvh;
         padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
-                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+                 max(6px, calc(env(safe-area-inset-bottom) - 8px)) calc(4px + env(safe-area-inset-left));
         gap: 4px;
         border-radius: 0;
 
@@ -625,7 +626,7 @@
         height: 100dvh;
         flex-direction: column;
         padding: calc(4px + env(safe-area-inset-top)) calc(4px + env(safe-area-inset-right))
-                 calc(4px + env(safe-area-inset-bottom)) calc(4px + env(safe-area-inset-left));
+                 max(6px, calc(env(safe-area-inset-bottom) - 8px)) calc(4px + env(safe-area-inset-left));
         gap: 4px;
         border-radius: 0;
 
@@ -733,9 +734,9 @@
     <div class="calculator">
         <div class="left-panel">
             <div class="mode-selector">
-                <button class="mode-btn active" data-mode="decimal">Decimal</button>
+                <button class="mode-btn" data-mode="decimal">Decimal</button>
                 <button class="mode-btn" data-mode="integer">Integer</button>
-                <button class="mode-btn" data-mode="currency">Currency</button>
+                <button class="mode-btn active" data-mode="currency">Currency</button>
             </div>
 
             <div class="memory-indicator" id="memoryIndicator"></div>
@@ -853,7 +854,7 @@
         class RPNCalculator {
             constructor() {
                 this.STACK_SIZE = 12;
-                this.mode = 'decimal';
+                this.mode = 'currency';
                 this.memory = 0;
                 this.PRECISION = 10;        // HP-12C style: 10 significant digits
                 this.reset();
