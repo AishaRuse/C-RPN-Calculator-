@@ -296,7 +296,7 @@
            ============================================ */
 
         /* iPad (including iPad Air 2025) - Landscape */
-        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: landscape) {
+        @media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) and (orientation: landscape) and (min-height: 501px) {
             html, body {
                 width: 100%;
                 height: 100%;
@@ -480,7 +480,7 @@
         }
 
 
-@media (max-width: 767px) and (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 500px) {
     html, body {
         width: 100%;
         height: 100%;
@@ -1201,12 +1201,17 @@
         let stackValueEls = [];
         let currentRegisters = -1;
 
+        // A phone is small on its SHORT edge in either orientation (iPhones are
+        // <=430px on the short side; iPads are >=744px). Using the short edge means
+        // landscape is detected correctly, where an iPhone's WIDTH is its long edge.
+        function isPhone() {
+            return Math.min(window.innerWidth, window.innerHeight) <= 500;
+        }
+
         function computeRegisters() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            const landscape = w > h;
-            if (w <= 767) return landscape ? 4 : 6;     // iPhone
-            return 12;                                    // iPad & desktop
+            const landscape = window.innerWidth > window.innerHeight;
+            if (isPhone()) return landscape ? 4 : 6;    // iPhone
+            return 12;                                   // iPad & desktop
         }
 
         function buildStack(n) {
@@ -1233,15 +1238,13 @@
         }
 
         function updateLayout() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            const isLandscape = width > height;
+            const isLandscape = window.innerWidth > window.innerHeight;
 
             const leftFunctions = document.getElementById('leftFunctions');
             const rightFunctions = document.getElementById('rightFunctions');
 
             // iPhone landscape shows the function pad on the left; everything else on the right.
-            if (width <= 767 && isLandscape) {
+            if (isPhone() && isLandscape) {
                 leftFunctions.style.display = 'flex';
                 rightFunctions.style.display = 'none';
             } else {
