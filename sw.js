@@ -3,7 +3,7 @@
    works whether it is served from a domain root or a GitHub Pages
    project subpath (e.g. https://username.github.io/repo/). */
 
-const CACHE = 'rpn-calc-v2';
+const CACHE = 'rpn-calc-v3';
 
 const ASSETS = [
   './',
@@ -19,10 +19,13 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
   );
+});
+
+// The page sends this when the user taps "Update" on the toast.
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {

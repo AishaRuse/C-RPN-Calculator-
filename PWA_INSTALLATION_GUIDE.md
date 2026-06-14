@@ -17,6 +17,7 @@ rpn-calculator/
 ├── icon-192.png
 ├── icon-512.png
 ├── icon-generator.html     ← optional tool to regenerate the PNG icons
+├── test.js                 ← engine test harness (Node; not used at runtime)
 └── PWA_INSTALLATION_GUIDE.md
 ```
 
@@ -65,10 +66,29 @@ Click the install icon in the address bar, or use the browser menu → *Install*
 - **Responsive, drop-free keys** — taps register on press, so fast successive
   digit entry is never swallowed.
 - **Offline support** — the service worker caches the app shell on first load.
-- **Three modes** — Decimal, Integer, Currency.
+- **Three modes** — Currency (default at startup), Decimal, and Integer.
+- **Backspace key (⌫)** — sits under CLX; deletes the last digit while
+  typing, or clears X if you're not mid-entry.
+- **Remembers your session** — the stack, memory, and mode are saved and
+  restored across launches (on the deployed site; not in a preview sandbox).
+- **In-app update prompt** — when you deploy a new version, an "Update
+  available" toast appears; tapping it loads the new version.
 - **Keyboard input** — digits, `. , + - * /`, `%`, `Enter`/`=`,
   `Backspace`, `Delete` (CLx), `Esc` (Clear). Browser shortcuts such as
   Ctrl/Cmd+R and Ctrl/Cmd+C are left untouched.
+
+## Running the tests
+
+The calculator engine has a test harness in `test.js`. It pulls the engine
+straight out of `index.html` and runs it, so the tests always exercise the
+exact code that ships. With Node installed:
+
+```
+node test.js
+```
+
+It prints each check and exits non-zero if any fail — handy as a quick
+regression check before committing changes to the engine.
 
 ## Updating the app
 
