@@ -507,7 +507,7 @@
         gap: 4px;
         border-radius: 0;
 
-        --iphone-key-h: clamp(20px, 5.2vh, 28px);
+        --iphone-key-h: clamp(26px, 8vh, 40px);
         --iphone-key-gap: 3px;
     }
 
@@ -588,7 +588,7 @@
     .key.function,
     .key.special,
     .key.math {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .key.enter,
@@ -1209,8 +1209,7 @@
         }
 
         function computeRegisters() {
-            const landscape = window.innerWidth > window.innerHeight;
-            if (isPhone()) return landscape ? 4 : 6;    // iPhone
+            if (isPhone()) return 6;                     // iPhone: 6-level visible stack
             return 12;                                   // iPad & desktop
         }
 

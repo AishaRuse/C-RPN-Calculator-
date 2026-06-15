@@ -3,7 +3,7 @@
    works whether it is served from a domain root or a GitHub Pages
    project subpath (e.g. https://username.github.io/repo/). */
 
-const CACHE = 'rpn-calc-v4';
+const CACHE = 'rpn-calc-v5';
 
 const ASSETS = [
   './',
